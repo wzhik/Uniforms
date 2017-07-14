@@ -291,7 +291,7 @@ function UniformsClass() {
     };
 
     // По возвожности отправляет события в метрику и аналитику
-    this.__SendGoals = function (insideEvent) {
+    this.SendGoals = function (insideEvent) {
         var yaLabelPrefix, gaEvent, yandexCounter;
         switch (insideEvent) {
             case 'open':        // открытие формы
@@ -309,11 +309,16 @@ function UniformsClass() {
         }
 
         // найдем счетчик метрики. Ищем его здесь потому что при инициализации он еще не готов
-        try { yandexCounter = window[document.body.innerHTML.match(/yaCounter[0-9]{1,}/)[0]];  }
-        catch (e){ this.page.yandexCounterExist = false; this.__Log('warn', 'Код Яндекс.Метрики не найден'); }
+        try {
+            uniformsThis.yandexCounter = window[document.body.innerHTML.match(/yaCounter[0-9]{1,}/)[0]];
+        }
+        catch (e){
+            uniformsThis.page.yandexCounterExist = false;
+            this.__Log('warn', 'Код Яндекс.Метрики не найден');
+        }
 
-        if ( typeof yandexCounter == 'object') {
-            yandexCounter.reachGoal(uniformsThis.form.data.name + yaLabelPrefix);
+        if ( typeof uniformsThis.yandexCounter == 'object') {
+            uniformsThis.yandexCounter.reachGoal(uniformsThis.form.data.name + yaLabelPrefix);
         }
         if (uniformsThis.page.googleAnalyticsExist) {
             ga('send', 'event', 'form', gaEvent, uniformsThis.form.data.name, 1);
@@ -339,7 +344,7 @@ function UniformsClass() {
                 uniformsThis.body.prepend(data);
                 uniformsThis.form.container = uniformsThis.body.find('.uniforms-popup__container');
                 uniformsThis.__ExecuterFunctions('open');
-                uniformsThis.__SendGoals('open');
+                uniformsThis.SendGoals('open');
                 uniformsThis.__Log('log', 'Форма показана');
             }
         });
@@ -368,7 +373,7 @@ function UniformsClass() {
                 if (data.status == 1) {
                     uniformsThis.__FormFog('success');
                     uniformsThis.__ExecuterFunctions('afterSubmit');
-                    uniformsThis.__SendGoals('submit');
+                    uniformsThis.SendGoals('submit');
                     uniformsThis.__Log('log', 'Форма  отправлена');
                     uniformsThis.__EndForm(uniformsThis.config.closePopupFormTimeout);
                 } else {
@@ -378,7 +383,7 @@ function UniformsClass() {
             }
         });
 
-        uniformsThis.__SendGoals('submit');
+        uniformsThis.SendGoals('submit');
 
         uniformsThis.__FormUnBlockElements();
 
@@ -415,7 +420,7 @@ function UniformsClass() {
 
     // Закроет popup-форму
     this.__FormClose = function () {
-        uniformsThis.__SendGoals('close');
+        uniformsThis.SendGoals('close');
         uniformsThis.form.container.remove();
         uniformsThis.__Log('log','popup-форма закрыта');
         uniformsThis.Clean();
@@ -495,7 +500,13 @@ function UniformsClass() {
     this.__Init();
 }
 
-var Uniforms = {};
-jQuery(document).ready(function(){
+var Uniforms;
+
+if ((typeof uniStageSystem != 'undefined')&&(uniStageSystem === true)) {
+    // запускаем инициализируем во второй стадии
+    jBody.on('second-stage-load',  function () {
+        Uniforms = new UniformsClass();
+    })
+} else {
     Uniforms = new UniformsClass();
-});
+}
