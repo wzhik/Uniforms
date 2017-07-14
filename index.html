@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="/css/uniforms.css">
+    </head>
+    <body>
+        <button class="uniforms show" data-uniforms-name="testForm" data-uniforms-template="default" data-uniforms-profile-id="1" data-uniforms-subject="Тема заявки с тестовой формы" data-uniforms-description="Описание заявки с тестовой формы">Показать</button>
+
+        <form class="uniforms">
+            <fieldset>
+                <input type="hidden" name="u-name" value="test-inline-form">
+                <input type="hidden" name="u-pid" value="1">
+                <input type="hidden" name="u-subject" value="тема письма">
+                <input type="hidden" name="u-description" value="описание заявки в теле письма">
+                <input type="hidden" name="u-extdata" value="расширенные данные">
+
+                <legend>Инлайн форма</legend>
+
+                <div class="uniforms__field-group">
+                    <label></label>
+                    <input type="text" name="phone" value="" required="required">
+                </div>
+                <div class="uniforms__field-group">
+                    <label></label>
+                    <input type="email" name="email" value="" required="required" >
+                </div>
+                <div class="uniforms__submit-block">
+                    <button type="submit">Отправить</button>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="cart-block">
+            <label>Функционал корзины</label>
+
+
+            <table>
+                <tr>
+                    <td>Лист аллюминиевый</td>
+                    <td>
+                        <button class="uniforms-cart add" data-uniforms-cart-product-id="1" data-uniforms-cart-product-name="Лист аллюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
+                    </td>
+                    <td>
+                        <button class="uniforms-cart remove" data-uniforms-cart-product-id="1">-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Пруток аллюминиевый</td>
+                    <td>
+                        <button class="uniforms-cart add" data-uniforms-cart-product-id="2" data-uniforms-cart-product-name="Пруток аллюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
+                    </td>
+                    <td>
+                        <button class="uniforms-cart remove" data-uniforms-cart-product-id="2">-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Плита алюминиевая</td>
+                    <td>
+                        <button class="uniforms-cart add" data-uniforms-cart-product-id="3" data-uniforms-cart-product-name="Плита алюминиевая" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
+                    </td>
+                    <td>
+                        <button class="uniforms-cart remove" data-uniforms-cart-product-id="3">-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Рулон алюминиевый</td>
+                    <td>
+                        <button class="uniforms-cart add" data-uniforms-cart-product-id="4" data-uniforms-cart-product-name="Рулон алюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
+                    </td>
+                    <td>
+                        <button class="uniforms-cart remove" data-uniforms-cart-product-id="4">-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Шестигранник алюминиевый</td>
+                    <td>
+                        <button class="uniforms-cart add" data-uniforms-cart-product-id="5" data-uniforms-cart-product-name="Шестигранник алюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
+                    </td>
+                    <td>
+                        <button class="uniforms-cart remove" data-uniforms-cart-product-id="5">-</button>
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+            <button class="uniforms cart-change" data-uniforms-cart-product-id="3" data-uniforms-cart-product-quantity="10" data-uniforms-cart-product-cost="1000">Изменить товар</button>
+            <button onclick="UniformsCart.Clean()">Очистить корзину</button>
+
+            <button onclick="console.log(UniformsCart.Get())">Показать корзину</button>
+        </div>
+    </body>
+
+    <script src="https://yastatic.net/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/uniforms.js" ></script>
+    <script src="js/uniforms-cart.js" ></script>
+</html>

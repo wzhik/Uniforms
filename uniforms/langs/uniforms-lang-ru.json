@@ -1,0 +1,10 @@
+{
+  "lastChange": 1483048844000,
+  "fogLabelInfo": "Форма отправляется",
+  "fogLabelError": "Возникла ошибка",
+  "fogLabelSuccess": "Форма успешно отправлена",
+
+  "logMessageBeforeSend": "Выполнена функция до отправки для формы ",
+  "logMessageAfterSend": "Выполнена функция после отправки для формы ",
+  "logMessageOpenForm": "Выполнена функция при открытии формы "
+}

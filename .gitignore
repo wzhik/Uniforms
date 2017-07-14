@@ -1,0 +1,11 @@
+.htaccess
+/uniforms/classes/PHPMailerAutoload.php
+/uniforms/classes/class.phpmaileroauth.php
+/uniforms/classes/class.pop3.php
+/uniforms/classes/class.smtp.php
+/uniforms/classes/class.phpmailer.php
+/uniforms/classes/class.phpmaileroauthgoogle.php
+/.doc/
+/.idea/
+/js/vendor/
+/css/vendor/

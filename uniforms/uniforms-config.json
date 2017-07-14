@@ -1,0 +1,13 @@
+{
+  "debugMode": true,
+  "domain": "uniforms.uni-studio.ru",
+  "successPageUrl": "",
+  "processorUrl": "/ajax/uniforms.php",
+  "langsUrl": "/uniforms/langs/",
+  "jsUrl": "/js/",
+  "cssUrl": "/css/",
+  "detectRegion": true,
+  "sourceDetector": false,
+  "allowSendUser": false,
+  "closePopupFormTimeout": 3000
+}
