@@ -7,8 +7,7 @@ function UniformsCartClass() {
 
     // Содержит конфиг
     this.config = {};
-
-
+    this.body = {};
 
     /**
      * PRIVATE METHODS
@@ -26,10 +25,15 @@ function UniformsCartClass() {
 
         jQuery.getJSON('/uniforms/uniforms-config.json', function (data) {
 
-            // todo Проверить пришли ли данные
-            thisClass.config = data;
-            thisClass.__Log('log', 'Файл конфига загружен');
-            thisClass.__InitCart();
+            if (data.configLoaded != 'yes') {
+                console.warn('uniforms-cart: config not loaded. Disable!');
+                return false;
+            }
+            else {
+                thisClass.config = data;
+                thisClass.__Log('log', 'Файл конфига загружен');
+                thisClass.__InitCart();
+            }
         });
     };
 
@@ -45,15 +49,13 @@ function UniformsCartClass() {
         thisClass.body.on('click', '.uniforms-cart__product__add-cart', thisClass.Add);
         thisClass.body.on('click', '.uniforms-cart__product__remove-cart', thisClass.Remove);
 
-        window.UniformsCart = thisClass; // Запишем себя в глобальную переменную чтобы можно было управлять извне
-        // отправим событие что функционал корзины загрузился
-        thisClass.body.trigger('uniforms-cart-loaded');
         thisClass.__Log('log','Инициализирована корзина');
+        thisClass.body.trigger('uniforms-cart-loaded');
     };
 
     // Если включен режим отладки, пишет сообщения в консоль
     this.__Log = function (lvl, message) {
-        if (Uniforms.config.debugMode) {
+        if (thisClass.config.debugMode) {
             message = 'Uniforms-cart: '  + message;
             switch (lvl) {
                 case 'log':
@@ -92,52 +94,59 @@ function UniformsCartClass() {
         }
 
         var nameEl = jProduct.find('.uniforms-cart__product__name');
-        var costEl = jProduct.find('.uniforms-cart__product__name');
-        var quantityEl = jProduct.find('.uniforms-cart__product__name');
-        var variationEl = jProduct.find('.uniforms-cart__product__name');
-        var idEl = jProduct.find('.uniforms-cart__product__name');
+        var costEl = jProduct.find('.uniforms-cart__product__cost');
+        var quantityEl = jProduct.find('.uniforms-cart__product__quantity');
+        var variationEl = jProduct.find('.uniforms-cart__product__variation');
+        var idEl = jProduct.find('.uniforms-cart__product__id');
+        var hashEl = jProduct.find('.uniforms-cart__product__hash');
 
         var out = {};
 
-        if ((nameEl.tagName == 'select')||(nameEl.tagName == 'input')||(nameEl.tagName == 'textarea')) {
-            out.name = nameEl.val();
+        if ((nameEl.prop('tagName') == 'SELECT')||(nameEl.prop('tagName') == 'INPUT')||(nameEl.prop('tagName') == 'TEXTAREA')) {
+            out.name = nameEl.val().trim();
         }
         else {
-            out.name = nameEl.text();
+            out.name = nameEl.text().trim();
         }
 
-        if ((costEl.tagName == 'select')||(costEl.tagName == 'input')||(costEl.tagName == 'textarea')) {
-            out.cost = costEl.val();
+        if ((costEl.prop('tagName') == 'SELECT')||(costEl.prop('tagName') == 'INPUT')||(costEl.prop('tagName') == 'TEXTAREA')) {
+            out.cost = costEl.val().trim();
         }
         else {
-            out.cost = costEl.text();
+            out.cost = costEl.text().trim();
         }
 
-        if ((quantityEl.tagName == 'select')||(quantityEl.tagName == 'input')||(quantityEl.tagName == 'textarea')) {
-            out.quantity = quantityEl.val();
+        if ((quantityEl.prop('tagName') == 'SELECT')||(quantityEl.prop('tagName') == 'INPUT')||(quantityEl.prop('tagName') == 'TEXTAREA')) {
+            out.quantity = quantityEl.val().trim();
         }
         else {
-            out.quantity = quantityEl.text();
+            out.quantity = quantityEl.text().trim();
         }
 
-        if ((idEl.tagName == 'select')||(idEl.tagName == 'input')||(idEl.tagName == 'textarea')) {
-            out.id = idEl.val();
+        if ((idEl.prop('tagName') == 'SELECT')||(idEl.prop('tagName') == 'INPUT')||(idEl.prop('tagName') == 'TEXTAREA')) {
+            out.id = idEl.val().trim();
         }
         else {
-            out.id = idEl.text();
+            out.id = idEl.text().trim();
         }
 
-        if ((variationEl.tagName == 'select')||(variationEl.tagName == 'input')||(variationEl.tagName == 'textarea')) {
-            out.variation = variationEl.val();
+        if ((variationEl.prop('tagName') == 'SELECT')||(variationEl.prop('tagName') == 'INPUT')||(variationEl.prop('tagName') == 'TEXTAREA')) {
+            out.variation = variationEl.val().trim();
         }
         else {
-            out.variation = variationEl.text();
+            out.variation = variationEl.text().trim();
         }
 
-        if (NoEmpty(out.variation)) {
-            out.hash = md5(out.name + out.variation);
-        } else {
-            out.hash = md5(out.name);
+        if (hashEl.length != 0) {
+            out.hash = hashEl.text().trim();
+        }
+        else {
+
+            if (NoEmpty(out.variation)) {
+                out.hash = md5(out.name + out.variation);
+            } else {
+                out.hash = md5(out.name);
+            }
         }
 
         return out;
@@ -155,10 +164,10 @@ function UniformsCartClass() {
 
         var product = thisClass.__GetCurrState(jProduct);
 
-        if (NoEmpty(cart[hash])) {
-            cart[hash].quantity += product.quantity;
+        if (NoEmpty(cart[product.hash])) {
+            cart[product.hash].quantity += product.quantity;
         } else {
-            cart[hash] = product;
+            cart[product.hash] = product;
         }
 
         thisClass.__SaveCartObject(cart);
@@ -175,6 +184,10 @@ function UniformsCartClass() {
 
         if (NoEmpty(cart[product.hash])) {
             delete (cart[product.hash]);
+
+            // Удалим элемент со страницы
+            jProduct.remove();
+
             thisClass.__SaveCartObject(cart);
             thisClass.__Log('log', 'Товар ' + product.name + ' удален из корзины');
             thisClass.body.trigger('uniforms-cart-product-remove');
@@ -195,7 +208,7 @@ function UniformsCartClass() {
         if (NoEmpty(cart[product.hash])) {
             cart[product.hash] = product;
             thisClass.__Log('log', 'Товар ' + product.name + ' изменен');
-            thisClass.body('uniforms-cart-product-change');
+            thisClass.body.trigger('uniforms-cart-product-change');
         }
         // Если такого товара нет в корзине тогда его добавим
         else {

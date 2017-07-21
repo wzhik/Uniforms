@@ -9,5 +9,6 @@
   "detectRegion": true,
   "sourceDetector": false,
   "allowSendUser": false,
-  "closePopupFormTimeout": 3000
+  "closePopupFormTimeout": 3000,
+  "configLoaded": "yes"
 }
