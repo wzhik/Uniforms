@@ -291,7 +291,7 @@ function UniformsClass() {
     };
 
     // По возвожности отправляет события в метрику и аналитику
-    this.SendGoals = function (insideEvent) {
+    this.__SendGoals = function (insideEvent) {
         var yaLabelPrefix, gaEvent, yandexCounter;
         switch (insideEvent) {
             case 'open':        // открытие формы
@@ -344,7 +344,7 @@ function UniformsClass() {
                 uniformsThis.body.prepend(data);
                 uniformsThis.form.container = uniformsThis.body.find('.uniforms-popup__container');
                 uniformsThis.__ExecuterFunctions('open');
-                uniformsThis.SendGoals('open');
+                uniformsThis.__SendGoals('open');
                 uniformsThis.__Log('log', 'Форма показана');
             }
         });
@@ -373,7 +373,7 @@ function UniformsClass() {
                 if (data.status == 1) {
                     uniformsThis.__FormFog('success');
                     uniformsThis.__ExecuterFunctions('afterSubmit');
-                    uniformsThis.SendGoals('submit');
+                    uniformsThis.__SendGoals('submit');
                     uniformsThis.__Log('log', 'Форма  отправлена');
                     uniformsThis.__EndForm(uniformsThis.config.closePopupFormTimeout);
                 } else {
@@ -383,7 +383,7 @@ function UniformsClass() {
             }
         });
 
-        uniformsThis.SendGoals('submit');
+        uniformsThis.__SendGoals('submit');
 
         uniformsThis.__FormUnBlockElements();
 
@@ -420,7 +420,7 @@ function UniformsClass() {
 
     // Закроет popup-форму
     this.__FormClose = function () {
-        uniformsThis.SendGoals('close');
+        uniformsThis.__SendGoals('close');
         uniformsThis.form.container.remove();
         uniformsThis.__Log('log','popup-форма закрыта');
         uniformsThis.Clean();

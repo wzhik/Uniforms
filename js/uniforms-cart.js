@@ -9,6 +9,8 @@ function UniformsCartClass() {
     this.config = {};
     this.body = {};
 
+    this.yandexCounter = '';
+
     /**
      * PRIVATE METHODS
      */
@@ -152,6 +154,48 @@ function UniformsCartClass() {
         return out;
     };
 
+    // Попытается отправить событие в метрику и в аналитику
+    this.__SendGoals = function (insideEvent) {
+        var yaLabelPrefix, gaEvent, yandexCounter;
+        switch (insideEvent) {
+            case 'remove':        
+                yaLabelEvent = 'cart_remove_product';
+                gaEvent = 'remove';
+                break;
+            case 'send':      
+                yaLabelEvent = 'cart_send_order';
+                gaEvent = 'send';
+                break;
+            case 'change':
+                yaLabelEvent = 'cart_change_product';
+                gaEvent = 'change';
+                break;
+            case 'add':
+                yaLabelEvent = 'cart_add_product';
+                gaEvent = 'add';
+                break;
+            case 'clean':
+                yaLabelEvent = 'cart_clean';
+                gaEvent = 'clean';
+                break;
+        }
+
+        // найдем счетчик метрики. Ищем его здесь потому что при инициализации он еще не готов
+        try {
+            thisClass.yandexCounter = window[document.body.innerHTML.match(/yaCounter[0-9]{1,}/)[0]];
+        }
+        catch (e){
+            this.__Log('warn', 'Код Яндекс.Метрики не найден');
+        }
+
+        if (typeof thisClass.yandexCounter == 'object') {
+            thisClass.yandexCounter.reachGoal(yaLabelPrefix);
+        }
+        if (typeof ga == 'function') {
+            ga('send', 'event', 'cart', gaEvent, 'uniforms-cart', 1);
+        }
+    };
+
 
     /**
      * PUBLIC METHODS
@@ -165,9 +209,10 @@ function UniformsCartClass() {
         var product = thisClass.__GetCurrState(jProduct);
 
         if (NoEmpty(cart[product.hash])) {
-            cart[product.hash].quantity += product.quantity;
+            cart[product.hash].quantity = parseInt(cart[product.hash].quantity) + parseInt(product.quantity);
         } else {
             cart[product.hash] = product;
+            thisClass.__SendGoals('add');
         }
 
         thisClass.__SaveCartObject(cart);
@@ -191,6 +236,7 @@ function UniformsCartClass() {
             thisClass.__SaveCartObject(cart);
             thisClass.__Log('log', 'Товар ' + product.name + ' удален из корзины');
             thisClass.body.trigger('uniforms-cart-product-remove');
+            thisClass.__SendGoals('remove');
         } else {
             thisClass.__Log('log', 'Товара ' + product.name + ' нет в корзине');
         }
@@ -209,10 +255,12 @@ function UniformsCartClass() {
             cart[product.hash] = product;
             thisClass.__Log('log', 'Товар ' + product.name + ' изменен');
             thisClass.body.trigger('uniforms-cart-product-change');
+            thisClass.__SendGoals('change');
         }
         // Если такого товара нет в корзине тогда его добавим
         else {
             thisClass.Add(event);
+            thisClass.__SendGoals('add');
         }
 
         thisClass.__SaveCartObject(cart);
@@ -242,7 +290,8 @@ function UniformsCartClass() {
     // Очищает все данные корзины
     this.Clean = function() {
         localStorage.setItem('uniforms-cart','{}');
-        thisClass.__Log('log', 'Корзина очищена')
+        thisClass.__Log('log', 'Корзина очищена');
+        thisClass.__SendGoals('clean');
     };
 
     // Создает заказ из переданных данных
@@ -261,30 +310,36 @@ function UniformsCartClass() {
         }
     };
 
-    // Отпраляет все товары, находящиеся в корзине, в виде заказа
+        // Отпраляет все товары, находящиеся в корзине, в виде заказа
     this.SendOrder = function() {
 
         thisClass.__Log('log', 'отправка заказа');
+
+        var flgResSend = false;
 
         jQuery.ajax({
             "url": thisClass.config.processorUrl,
             "type": "POST",
             "data": {
                 "u-at": "sendorder",
-                "data": JSON.stringify(thisClass.order)
+                "u-data": JSON.stringify(thisClass.order),
+                "u-title": document.title,
+                "u-url" : window.location.href
             },
             "dataType": "json",
             "success": function (data) {
                 if (data.status == 1) {
                     thisClass.__Log('log', 'заказ отправлен');
-                    thisClass.SendGoals()
-
+                    thisClass.__SendGoals('send');
+                    thisClass.Clean();
+                    flgResSend = true;
                 } else {
                     thisClass.__Log('log', 'ошибка при отправке заказа ' + data.message);
                 }
             }
         });
-        thisClass.Clean();
+
+        return flgResSend;        
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -301,5 +356,3 @@ if ((typeof uniStageSystem != 'undefined')&&(uniStageSystem === true)) {
 } else {
     UniformsCart = new UniformsCartClass();
 }
-
-

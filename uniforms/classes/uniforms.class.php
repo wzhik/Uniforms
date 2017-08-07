@@ -60,7 +60,7 @@ class UniformsClass {
 
 
 
-    /**
+    /**     
      *  Выберет тип действия
      */
     private function ChangeAction() {
@@ -70,6 +70,9 @@ class UniformsClass {
                 break;
             case 'send':
                 $this->ProcessForm();
+                break;
+            case 'sendorder':
+                $this->ProcessSendOrder();
                 break;
             default:
                 header("HTTP/1.0 400 Bad Request");
@@ -216,7 +219,18 @@ class UniformsClass {
     private function MailSend() {
 
         // Сформируем текст письма
-        $mailHTML = $this->MailSend__GetTemplate('_operator-mail');
+        switch ($this->request['u-at']) {
+            case 'send':
+                $mailHTML = $this->MailSend__GetTemplate('_operator-mail');
+                break;
+            case 'sendorder':
+                $mailHTML = $this->MailSend__GetTemplate('_operator-mail-order');
+                break;
+            default: 
+                $this->SendJSON(json_encode(array('status' => 0, 'message' => 'action not select')));
+                break;
+        }
+
 
         if ($this->config['sender']['type'] == 'hosting') {
 
@@ -330,6 +344,13 @@ class UniformsClass {
                 $this->SendBadRequest('empty contact data');
             }
         }
+
+        if ($this->request['u-at'] == 'sendorder') {
+          
+            if (empty($this->request['u-data']['buyer']['phone']) && empty($this->request['u-data']['buyer']['email'])) {
+                $this->SendBadRequest('empty contact data');
+            }
+        }
     }
 
     /**
@@ -337,6 +358,10 @@ class UniformsClass {
      */
     private function GetRequest() {
         $this->request = $_POST;
+        if (isset($this->request['u-data'])) {
+            $this->request['u-data'] = json_decode($this->request['u-data'], true);
+
+        }
     }
 
     /**
@@ -344,80 +369,105 @@ class UniformsClass {
      */
     private function FinalyConfig() {
 
-        // ПОИСК ПОЛУЧАТЕЛЕЙ
-        if (!empty($this->request['u-name']) && count($this->config['forms'][$this->request['u-name']])) {
+        // Заказ из корзины
+        if ($this->request['u-at'] == 'sendorder') {
+            $this->finalyConfig['form']['subject'] = $this->config['cart']['mailDescription'];
+            $this->finalyConfig['form']['recipients'] = $this->config['cart']['recipients'];
+            $this->finalyConfig['form']['description'] = $this->config['cart']['description'];
+        }
+        // Не заказ из корзины
+        else {       
 
             // ПОИСК ПОЛУЧАТЕЛЕЙ
-            // если есть в секции именной формы есть настройка получателей
-            if (!empty($this->config['forms'][$this->request['u-name']]['recipients'])) {
-                $this->finalyConfig['form']['recipients'] = $this->config['forms'][$this->request['u-name']]['recipients'];
-            } // если в именной секции нет получателей
+            if (!empty($this->request['u-name']) && count($this->config['forms'][$this->request['u-name']])) {
+
+                // ПОИСК ПОЛУЧАТЕЛЕЙ
+                // если есть в секции именной формы есть настройка получателей
+                if (!empty($this->config['forms'][$this->request['u-name']]['recipients'])) {
+                    $this->finalyConfig['form']['recipients'] = $this->config['forms'][$this->request['u-name']]['recipients'];
+                } // если в именной секции нет получателей
+                else {
+                    // ищем получателей по номеру профиля
+                    if (is_numeric($this->request['u-pid']) && count($this->config['profiles'][$this->request['u-pid']]['recipients'])) {
+                        $this->finalyConfig['form']['recipients'] = $this->config['profiles'][$this->request['u-pid']]['recipients'];
+                    } // берем получателей из дефолтной секции
+                    else {
+                        $this->finalyConfig['form']['recipients'] = $this->config['default']['recipients'];
+                    }
+                }
+            }
             else {
-                // ищем получателей по номеру профиля
-                if (is_numeric($this->request['u-pid']) && count($this->config['profiles'][$this->request['u-pid']]['recipients'])) {
-                    $this->finalyConfig['form']['recipients'] = $this->config['profiles'][$this->request['u-pid']]['recipients'];
-                } // берем получателей из дефолтной секции
+                if ( is_numeric($this->request['u-pid']) && count($this->config['profiles'][$this->request['u-pid']]['recipients'])) {
+                $this->finalyConfig['form']['recipients'] =  $this->config['profiles'][$this->request['u-pid']]['recipients'];
+                }
                 else {
                     $this->finalyConfig['form']['recipients'] = $this->config['default']['recipients'];
                 }
             }
-        }
-        else {
-            if ( is_numeric($this->request['u-pid']) && count($this->config['profiles'][$this->request['u-pid']]['recipients'])) {
-               $this->finalyConfig['form']['recipients'] =  $this->config['profiles'][$this->request['u-pid']]['recipients'];
-            }
-            else {
-                $this->finalyConfig['form']['recipients'] = $this->config['default']['recipients'];
-            }
-        }
 
-
-        // ПОИСК ТЕМЫ
-        // Если форма не передала тему сообщения
-        if (!isset($this->request['u-subject'])) {
-            // Если в именной секции есть настройка темы
-            if (isset($this->request['u-name']) && !empty($this->config['forms'][$this->request['u-name']]['mailSubject'])) {
-                $this->finalyConfig['form']['subject'] = $this->config['forms'][$this->request['u-name']]['mailSubject'];
-            }
-            else {
-                if (is_numeric($this->request['u-pid']) && !empty($this->config['profiles'][$this->request['u-pid']]['mailSubject'])) {
-                    $this->finalyConfig['form']['subject'] = $this->config['profiles'][$this->request['u-pid']]['mailSubject'];
+            // ПОИСК ТЕМЫ
+            // Если форма не передала тему сообщения
+            if (!isset($this->request['u-subject'])) {
+                // Если в именной секции есть настройка темы
+                if (isset($this->request['u-name']) && !empty($this->config['forms'][$this->request['u-name']]['mailSubject'])) {
+                    $this->finalyConfig['form']['subject'] = $this->config['forms'][$this->request['u-name']]['mailSubject'];
                 }
                 else {
-                    $this->finalyConfig['form']['subject'] = $this->config['default']['mailSubject'];
-                }
-            }
-        }
-        else {
-            $this->finalyConfig['form']['subject'] = $this->request['u-subject'];
-        }
-        // Добавим префикс к теме
-        $this->finalyConfig['form']['subject'] = "[{$this->config['domain']}] " . $this->finalyConfig['form']['subject'];
-
-        // ПОИСК ОПИСАНИЯ
-        // Если форма не передала описание
-        if (!isset($this->request['u-description'])) {
-            // Если в именной секции есть настройка описания
-            if (isset($this->request['u-name']) && !empty($this->config['forms'][$this->request['u-name']]['mailDescription'])) {
-                $this->finalyConfig['form']['description'] = $this->config['forms'][$this->request['u-name']]['mailDescription'];
-            }
-            else {
-                if (is_numeric($this->request['u-pid']) && !empty($this->config['profiles'][$this->request['u-pid']]['mailDescription'])) {
-                    $this->finalyConfig['form']['description'] = $this->config['profiles'][$this->request['u-pid']]['mailDescription'];
-                }
-                else {
-                    if (!empty($this->config['default']['mailDescription'])) {
-                        $this->finalyConfig['form']['description'] = $this->config['default']['mailDescription'];
+                    if (is_numeric($this->request['u-pid']) && !empty($this->config['profiles'][$this->request['u-pid']]['mailSubject'])) {
+                        $this->finalyConfig['form']['subject'] = $this->config['profiles'][$this->request['u-pid']]['mailSubject'];
                     }
                     else {
-                        $this->finalyConfig['form']['description'] = '';
+                        $this->finalyConfig['form']['subject'] = $this->config['default']['mailSubject'];
                     }
                 }
             }
+            else {
+                $this->finalyConfig['form']['subject'] = $this->request['u-subject'];
+            }
+            // Добавим префикс к теме
+            $this->finalyConfig['form']['subject'] = "[{$this->config['domain']}] " . $this->finalyConfig['form']['subject'];
+
+            // ПОИСК ОПИСАНИЯ
+            // Если форма не передала описание
+            if (!isset($this->request['u-description'])) {
+                // Если в именной секции есть настройка описания
+                if (isset($this->request['u-name']) && !empty($this->config['forms'][$this->request['u-name']]['mailDescription'])) {
+                    $this->finalyConfig['form']['description'] = $this->config['forms'][$this->request['u-name']]['mailDescription'];
+                }
+                else {
+                    if (is_numeric($this->request['u-pid']) && !empty($this->config['profiles'][$this->request['u-pid']]['mailDescription'])) {
+                        $this->finalyConfig['form']['description'] = $this->config['profiles'][$this->request['u-pid']]['mailDescription'];
+                    }
+                    else {
+                        if (!empty($this->config['default']['mailDescription'])) {
+                            $this->finalyConfig['form']['description'] = $this->config['default']['mailDescription'];
+                        }
+                        else {
+                            $this->finalyConfig['form']['description'] = '';
+                        }
+                    }
+                }
+            }
+            else {
+                $this->finalyConfig['form']['description'] = $this->request['u-description'];
+            }
         }
-        else {
-            $this->finalyConfig['form']['description'] = $this->request['u-description'];
+    }
+
+    /**
+     * Обработает заказ из корзины
+     */
+    private function ProcessSendOrder() {
+        try {
+            $this->ValidateRequest();
         }
+        catch (ErrorException $e) {
+            $this->SendJSON(json_encode(array('status' => '0', 'message' => $e->getMessage())));
+        }
+
+        $this->FinalyConfig();
+
+        $this->MailSend();
     }
 }
 
