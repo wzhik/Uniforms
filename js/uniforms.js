@@ -67,7 +67,7 @@ function UniformsClass() {
     };
 
     // Сохраняет объект корзины в хранилице
-    this.__SaveObject = function (object) {
+    this.__SaveObject = function (object) {      
         var json = JSON.stringify(object);
         localStorage.setItem('uniforms', json);
     };
@@ -103,7 +103,7 @@ function UniformsClass() {
         // Повесим обработчики кнопок и событий отправки
         try {
             uniformsThis.body.on('click', '.uniforms.show',  uniformsThis.__Click);
-            uniformsThis.body.on('submit', '.uniforms,.uniforms-popup', uniformsThis.__Click);
+            uniformsThis.body.on('submit', '.uniforms-inline, .uniforms-popup', uniformsThis.__Click);
             uniformsThis.body.on('click', '.uniforms-popup__closer', uniformsThis.__FormClose);
             uniformsThis.body.on('click', '.uniforms-popup__body-fog', uniformsThis.__FormClose);
         }
@@ -136,6 +136,10 @@ function UniformsClass() {
 
         if (NoEmpty(object.userData) && (object.userData.lastAccess + 259200000 > currTimeStamp)) {
             uniformsThis.userData = object.userData;
+
+            object.userData = uniformsThis.userData;
+            uniformsThis.__SaveObject(object);
+            uniformsThis.body.trigger('uniforms-userdata-loaded');
         }
 
         // Если в localStorage пусто или последний раз пользователь был давно
@@ -145,23 +149,25 @@ function UniformsClass() {
 
             // Определяем местоположение
             if (uniformsThis.config.detectRegion) {
-                jQuery.getJSON('//ipinfo.io', function(data){
+                jQuery.getJSON('//ru.sxgeo.city/json', function(data){               
                     // todo проверить пришли ли данные
-                    uniformsThis.userData.city = data.city;
-                    uniformsThis.userData.region = data.region;
-                    uniformsThis.userData.country = data.country;
+                    uniformsThis.userData.city = data.city.name_ru;
+                    uniformsThis.userData.region = data.region.name_ru;
+                    uniformsThis.userData.country = data.country.name_ru;
                     uniformsThis.userData.loc = data.loc;
 
                     uniformsThis.__Log('log', 'Местоположение определено');
+                    object.userData = uniformsThis.userData;
+                    uniformsThis.__SaveObject(object);
+                    uniformsThis.body.trigger('uniforms-userdata-loaded');
                 });
             }
-
-            object.userData = uniformsThis.userData;
-            uniformsThis.__SaveObject(object);
-        }
-
-
-        uniformsThis.body.trigger('uniforms-userdata-loaded');
+            else {
+                object.userData = uniformsThis.userData;
+                uniformsThis.__SaveObject(object);
+                uniformsThis.body.trigger('uniforms-userdata-loaded');                
+            }           
+        }        
     };
 
     // Либо загружает языковые данные из localStorage, либо загружает их с сайта
@@ -254,38 +260,36 @@ function UniformsClass() {
 
         var target = jQuery(event.target);
 
+        if (target.prop('tagName') !== 'FORM') {
+            target = jQuery(event.currentTarget);
+        }
+
         // нажата кнопка показа формы
         if (target.hasClass('uniforms') && target.hasClass('show')) {
 
             uniformsThis.form.root = target;
             uniformsThis.form.typeObject = 'button';
-
             uniformsThis.form.data['u-name'] = target.data('u-name');
             uniformsThis.form.data['u-subject'] = target.data('u-subject');
             uniformsThis.form.data['u-description'] = target.data('u-description');
             uniformsThis.form.data['u-pid'] = target.data('u-pid');
-
             uniformsThis.__ShowForm();
         }
 
         // нажата кнопка отправки инлайн формы
-        else if (target.hasClass('uniforms') && (target.prop('tagName') == 'FORM')) {
-
+        else if (target.hasClass('uniforms-inline') && (target.prop('tagName') == 'FORM')) {
             uniformsThis.form.root = target;
             uniformsThis.form.typeObject = 'form-inline';
             uniformsThis.form.data.name = uniformsThis.form.root.find('[name=u-name]').val();
-
             uniformsThis.__SubmitForm();
         }
 
         // нажата кнопка отправки popup формы
-        else if (target.hasClass('uniforms-popup') && (target.prop('tagName') == 'FORM')) {
-
+        else if (target.hasClass('uniforms-popup__form') && (target.prop('tagName') == 'FORM')) {
             uniformsThis.form.root = target;
-            uniformsThis.form.container = target.parents('.uniforms-container');
+            uniformsThis.form.container = target.parents('.uniforms-popup');
             uniformsThis.form.typeObject = 'form-popup';
             uniformsThis.form.data.name = uniformsThis.form.root.find('[name=u-name]').val();
-
             uniformsThis.__SubmitForm();
         }
     };
@@ -394,16 +398,12 @@ function UniformsClass() {
     // Если это инлайн форма - то очистит поля или перекинет на success-страницу
     // Если это popup форма - закроет форму или перекинет на success-страницу
     this.__EndForm = function (timeout) {
-
         if (!(parseInt(timeout) && (timeout > 0))) {
             timeout = 5000;
         }
-
         // Если это popup-форма
         if (uniformsThis.form.typeObject == 'form-popup') {
-
-
-            setTimeout(uniformsThis.__FormClose, timeout)
+            setTimeout(uniformsThis.__FormClose, timeout);
         }
         // Если inline-форма
         else {
@@ -414,14 +414,13 @@ function UniformsClass() {
                 uniformsThis.__FormCleanFields();
                 setTimeout(uniformsThis.__FormFogRemove, timeout);
             }
-        }
-        uniformsThis.Clean();
+        }       
     };
 
     // Закроет popup-форму
     this.__FormClose = function () {
         uniformsThis.__SendGoals('close');
-        uniformsThis.form.container.remove();
+        jQuery('.uniforms-popup').remove();
         uniformsThis.__Log('log','popup-форма закрыта');
         uniformsThis.Clean();
     };
@@ -431,6 +430,7 @@ function UniformsClass() {
         uniformsThis.form.root.find('input[type != hidden]').val('');
         uniformsThis.form.root.find('option:selected').removeAttr('selected');
         uniformsThis.form.root.find('[name=u-extdata]').empty();
+        uniformsThis.Clean();
     };
 
     // Заблокирует все активные элементы в форме
@@ -441,8 +441,8 @@ function UniformsClass() {
                 jEl.attr('disabled', 'disabled');
                 jEl.attr('data-u-disabled', 'disabled');
             }
-            uniformsThis.__Log('log', 'форма заблокирована');
         });
+        uniformsThis.__Log('log', 'форма заблокирована');
     };
 
     // Разблокирует все элементы в форме
@@ -500,13 +500,4 @@ function UniformsClass() {
     this.__Init();
 }
 
-var Uniforms;
-
-if ((typeof uniStageSystem != 'undefined')&&(uniStageSystem === true)) {
-    // запускаем инициализируем во второй стадии
-    jBody.on('second-stage-load',  function () {
-        Uniforms = new UniformsClass();
-    })
-} else {
-    Uniforms = new UniformsClass();
-}
+var Uniforms = new UniformsClass();

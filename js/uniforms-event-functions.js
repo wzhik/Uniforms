@@ -1,14 +1,15 @@
-/**
- * Created by wzhik on 23.12.16.
- */
 var uniformsEventFunctions = {
-    "name-form_open": function (jForm) {
+    "nameForm_open": function (jForm) {
 
     },
-    "name-form_beforeSubmit": function (jForm) {
+    "nameForm_beforeSubmit": function (jForm) {
 
     },
-    "name-form_afterSubmit": function (jForm) {
+    "nameForm_afterSubmit": function (jForm) {
 
+    },
+    "beautyEnroll_beforeSubmit": function(jForm) {
+        console.log('beautyEnroll_beforeSubmit');
+        console.log(jForm);
     }
 };
