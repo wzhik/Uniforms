@@ -232,6 +232,8 @@ class UniformsClass {
         }
 
 
+
+
         if ($this->config['sender']['type'] == 'hosting') {
 
             $headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -266,6 +268,7 @@ class UniformsClass {
             $mailer->CharSet = 'UTF-8';
             $mailer->Host = $this->config['sender']['smtp'];
             $mailer->SMTPAuth = true;
+            $mailer->setFrom($this->config['sender']['senderEmail'], $this->config['sender']['senderName']);
             $mailer->Username = $this->config['sender']['login'];
             $mailer->Password = $this->config['sender']['pass'];
             $mailer->SMTPSecure = 'ssl';
@@ -368,15 +371,14 @@ class UniformsClass {
      * Сформирует конечный конфиг для отправки
      */
     private function FinalyConfig() {
-
         // Заказ из корзины
         if ($this->request['u-at'] == 'sendorder') {
-            $this->finalyConfig['form']['subject'] = $this->config['cart']['mailDescription'];
-            $this->finalyConfig['form']['recipients'] = $this->config['cart']['recipients'];
-            $this->finalyConfig['form']['description'] = $this->config['cart']['description'];
+            $this->finalyConfig['form']['subject'] = $this->config['profiles']['cart']['mailSubject'];
+            $this->finalyConfig['form']['recipients'] = $this->config['profiles']['cart']['recipients'];
         }
-        // Не заказ из корзины
-        else {       
+
+        else {
+
 
             // ПОИСК ПОЛУЧАТЕЛЕЙ
             if (!empty($this->request['u-name']) && count($this->config['forms'][$this->request['u-name']])) {
@@ -395,15 +397,14 @@ class UniformsClass {
                         $this->finalyConfig['form']['recipients'] = $this->config['default']['recipients'];
                     }
                 }
-            }
-            else {
-                if ( is_numeric($this->request['u-pid']) && count($this->config['profiles'][$this->request['u-pid']]['recipients'])) {
-                $this->finalyConfig['form']['recipients'] =  $this->config['profiles'][$this->request['u-pid']]['recipients'];
-                }
-                else {
+            } else {
+                if (is_numeric($this->request['u-pid']) && count($this->config['profiles'][$this->request['u-pid']]['recipients'])) {
+                    $this->finalyConfig['form']['recipients'] = $this->config['profiles'][$this->request['u-pid']]['recipients'];
+                } else {
                     $this->finalyConfig['form']['recipients'] = $this->config['default']['recipients'];
                 }
             }
+
 
             // ПОИСК ТЕМЫ
             // Если форма не передала тему сообщения
@@ -411,17 +412,14 @@ class UniformsClass {
                 // Если в именной секции есть настройка темы
                 if (isset($this->request['u-name']) && !empty($this->config['forms'][$this->request['u-name']]['mailSubject'])) {
                     $this->finalyConfig['form']['subject'] = $this->config['forms'][$this->request['u-name']]['mailSubject'];
-                }
-                else {
+                } else {
                     if (is_numeric($this->request['u-pid']) && !empty($this->config['profiles'][$this->request['u-pid']]['mailSubject'])) {
                         $this->finalyConfig['form']['subject'] = $this->config['profiles'][$this->request['u-pid']]['mailSubject'];
-                    }
-                    else {
+                    } else {
                         $this->finalyConfig['form']['subject'] = $this->config['default']['mailSubject'];
                     }
                 }
-            }
-            else {
+            } else {
                 $this->finalyConfig['form']['subject'] = $this->request['u-subject'];
             }
             // Добавим префикс к теме
@@ -433,24 +431,21 @@ class UniformsClass {
                 // Если в именной секции есть настройка описания
                 if (isset($this->request['u-name']) && !empty($this->config['forms'][$this->request['u-name']]['mailDescription'])) {
                     $this->finalyConfig['form']['description'] = $this->config['forms'][$this->request['u-name']]['mailDescription'];
-                }
-                else {
+                } else {
                     if (is_numeric($this->request['u-pid']) && !empty($this->config['profiles'][$this->request['u-pid']]['mailDescription'])) {
                         $this->finalyConfig['form']['description'] = $this->config['profiles'][$this->request['u-pid']]['mailDescription'];
-                    }
-                    else {
+                    } else {
                         if (!empty($this->config['default']['mailDescription'])) {
                             $this->finalyConfig['form']['description'] = $this->config['default']['mailDescription'];
-                        }
-                        else {
+                        } else {
                             $this->finalyConfig['form']['description'] = '';
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 $this->finalyConfig['form']['description'] = $this->request['u-description'];
             }
+
         }
     }
 
