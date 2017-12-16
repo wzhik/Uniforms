@@ -2,6 +2,7 @@
   "debugMode": true,
   "domain": "uniforms.uni-studio.ru",
   "successPageUrl": "",
+  "useSlides": true,
   "processorUrl": "/ajax/uniforms.php",
   "langsUrl": "/uniforms/langs/",
   "jsUrl": "/js/",
