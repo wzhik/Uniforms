@@ -35,7 +35,31 @@
             </tr>
             <?php } ?>
 
-            <?php if (!empty($data['u-data']['buyer']['email'])) { ?>
+            <?php if (!empty($data['u-data']['delivery'])) { ?>
+                <tr>
+                    <th style="text-align:right;">
+                        Доставка
+                    </th>
+                    <td><?php echo $data['u-data']['delivery'] ?></td>
+                </tr>
+            <?php } ?>
+            <?php if (!empty($data['u-data']['address'])) { ?>
+                <tr>
+                    <th style="text-align:right;">
+                        Адрес доставки
+                    </th>
+                    <td><?php echo $data['u-data']['address'] ?></td>
+                </tr>
+            <?php } ?>
+            <?php if (!empty($data['u-data']['type_pay'])) { ?>
+                <tr>
+                    <th style="text-align:right;">
+                        Способ оплаты
+                    </th>
+                    <td><?php echo $data['u-data']['type_pay'] ?></td>
+                </tr>
+            <?php } ?>
+            <?php if (!empty($data['u-data']['message'])) { ?>
             <tr>
                 <th style="text-align:right;">
                     Сообщение
@@ -57,10 +81,10 @@
             </tr>
             <?php foreach ($data['u-data']['cart'] as $cart_item) { ?>
                 <tr>
-                    <th align="left">
+                    <td align="left">
                         <span style="display: block;"><?php echo trim($cart_item['name'])?></span>
                         <?php if (!empty($cart_item['variation'])) { ?><span style="font-size: 80%"><?php echo $cart_item['variation']?></span> <?php } ?>
-                    </th>
+                    </td>
                     <td align="center">
                         <span><?php echo $cart_item['quantity'] ?></span>
                     </td>
@@ -141,7 +165,7 @@
             <td align="left"><?php echo $data['source_utm']?></td>
         </tr>
         <tr>
-            <td colspan="2" align="right"> <sup> ip: <?php echo $data['ipAddress']?>; Дата и время:<strong><?php echo date('d.m.Y H:i')?></strong> </sup>	</td>
+            <td colspan="2" align="right"> <sup> ip: <?php echo $data['ipAddress']?>; Дата и время:<strong><?php echo date('d.m.Y H:i')?></strong> </sup>   </td>
         </tr>
         <?php } ?>
         </tbody>
