@@ -100,9 +100,9 @@ function UniformsClass() {
         // Повесим обработчики кнопок и событий отправки
         try {
             uniformsThis.body.on('click', '.uniforms.show',  uniformsThis.__Click);
-            uniformsThis.body.on('submit', '.uniforms,.uniforms-popup', uniformsThis.__Click);
-            uniformsThis.body.on('click', '.uniforms-popup__closer', uniformsThis.__FormClose);
-            uniformsThis.body.on('click', '.uniforms-popup__body-fog', uniformsThis.__FormClose);
+            uniformsThis.body.on('submit', '.uniforms,.uniforms--popup', uniformsThis.__Click);
+            uniformsThis.body.on('click', '.uniforms--popup__closer', uniformsThis.__FormClose);
+            uniformsThis.body.on('click', '.uniforms--popup__body-fog', uniformsThis.__FormClose);
         }
         catch (e) {
             console.warn('Uniforms: ' + e + '\n\rUniforms disabled');
@@ -354,26 +354,24 @@ function UniformsClass() {
     // Покажет слайд об успешной отправке формы
     this.__ShowSuccessSlide = function() {
         if (uniformsThis.config.useSlides) {
-            var successSlide = uniformsThis.form.root.find('.uniforms__success-slide');
+            var successSlide = uniformsThis.form.root.find('.uniforms__result-slide--success');
 
             if (successSlide.length) {
                 successSlide.slideDown(300);
             }
         }
-    }
+    };
 
     // Покажет слайд об ошибке при отправке
     this.__ShowErrorSlide = function() {
         if (uniformsThis.config.useSlides) {
-            var successSlide = uniformsThis.form.root.find('.uniforms__error-slide');
+            var successSlide = uniformsThis.form.root.find('.uniforms__result-slide--error');
 
             if (successSlide.length) {
                 successSlide.slideDown(300);
             }
         }
-    }
-
-
+    };
 
     // Отправит форму
     this.__SubmitForm = function () {

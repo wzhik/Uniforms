@@ -10,12 +10,22 @@
 
         <section>
             <h2>Инлайн формы</h2>          
-            <form action="" class="uniforms">
+            <form action="" class="uniforms uniforms--inline">
                 <!-- Слайд успешной отправки формы. Показывается в случае успешной отправки -->
-                <div class="uniforms__success-slide"></div>
+                <div class="uniforms__result-slide uniforms__result-slide--success">
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                        <span class="uniforms__result-slide__h">Успешно отправлено</span>
+                        <span class="uniforms__result-slide__text">Ваша заявка отправлена, оператор свяжется с вами.</span>
+                    </div>
+                </div>
 
                 <!-- Слайд ошибки при отпрвке. Показывается если сервер сообщил об ошибке или при других причинах -->
-                <div class="unifroms__error-slide"></div>
+                <div class="uniforms__result-slide uniforms__result-slide--error">      
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                        <span class="uniforms__result-slide__h">Что-то пошло не так</span>
+                        <span class="uniforms__result-slide__text">Не удалось отправить заявку, свяжитесь с нами по телефону.</span>
+                    </div>
+                </div>
 
                 <fieldset>
                     <!-- Скрытые поля настройки формы -->

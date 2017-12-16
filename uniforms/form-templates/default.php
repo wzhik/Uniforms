@@ -1,8 +1,8 @@
-<div class="uniforms-popup">
-    <div class="uniforms-popup__body-fog"></div>
-    <div class="uniforms-popup__wrapper-form">
-        <div class="uniforms-popup__closer" title="Закрыть форму">&times;</div>
-        <form  class="uniforms-popup__form">
+<div class="uniforms uniforms--popup">
+    <div class="uniforms--popup__body-fog"></div>
+    <div class="uniforms--popup__wrapper-form">
+        <div class="uniforms--popup__closer" title="Закрыть форму">&times;</div>
+        <form  class="uniforms--popup__form">
             <legend class="uniforms__h">Заголовок формы</legend>
             <span class="uniforms__description">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
             <fieldset>
