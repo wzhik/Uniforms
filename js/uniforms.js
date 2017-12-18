@@ -19,8 +19,9 @@ function UniformsClass() {
 
     // Объект содержащий конфиг всей системы
     this.config = {
-        "debugMode": false,
-        "cartMode": false
+        debugMode: false,
+        cartMode: false,
+        yandexCounterStr: ''
     };
 
     // Объект с данными о текущей странице
@@ -119,10 +120,6 @@ function UniformsClass() {
 
         this.page.pageUrl = window.location.href;
         this.page.pageTitle =  jQuery('title').html();
-
-        // найдем счетчик аналитики
-        if (typeof ga == 'function' ) { this.page.googleAnalyticsExist = true; }
-        else {this.__Log('warn', 'Код Goole Analytics не найден'); this.page.googleAnalyticsExist = false; }
     };
 
     // Либо загружает данные из localStorage, либо получает их заного
@@ -153,10 +150,10 @@ function UniformsClass() {
 
                     uniformsThis.__Log('log', 'Местоположение определено');
                 });
-            }
+            }           
 
             object.userData = uniformsThis.userData;
-            uniformsThis.__SaveObject(object);
+            uniformsThis.__SaveObject(object);          
         }
 
 
@@ -218,6 +215,24 @@ function UniformsClass() {
             uniformsThis.__Log('log', logMessage);
         }
     };
+
+    // Ищет счетчик ЯндексМетрики
+    this.__FindYandexCounter = function () {
+        var yandexCounter = false;
+        var flgFindCounter = false;
+       
+        for (el in window) {
+            if (el.indexOf('yaCounter') != -1) {               
+                yandexCounter = window[el];
+                flgFindCounter = true;
+            }
+        }
+        if (!flgFindCounter) {
+            this.__Log('warn', 'Объект Яндекс.Метрики не найден');
+        }       
+      
+        return yandexCounter;
+    }
 
     // Подготавливает все необходимые данные для отправки формы
     // actionType - show | send
@@ -307,20 +322,20 @@ function UniformsClass() {
                 break;
         }
 
-        // найдем счетчик метрики. Ищем его здесь потому что при инициализации он еще не готов
-        try {
-            uniformsThis.yandexCounter = window[document.body.innerHTML.match(/yaCounter[0-9]{1,}/)[0]];
-        }
-        catch (e){
-            uniformsThis.page.yandexCounterExist = false;
-            this.__Log('warn', 'Код Яндекс.Метрики не найден');
-        }
+        var yandexCounter = uniformsThis.__FindYandexCounter();
 
-        if ( typeof uniformsThis.yandexCounter == 'object') {
-            uniformsThis.yandexCounter.reachGoal(uniformsThis.form.data.name + yaLabelPrefix);
+        if (yandexCounter !== false) {       
+            yandexCounter.reachGoal(uniformsThis.form.data.name + yaLabelPrefix);
+            uniformsThis.__Log('log', 'Отправлена цель: "' + uniformsThis.form.data.name + yaLabelPrefix + '"')
         }
-        if (uniformsThis.page.googleAnalyticsExist) {
+      
+
+        // найдем счетчик аналитики
+        if (typeof ga == 'function' ) { 
             ga('send', 'event', 'form', gaEvent, uniformsThis.form.data.name, 1);
+        }
+        else {
+            this.__Log('warn', 'Код Goole Analytics не найден'); 
         }
     };
 
