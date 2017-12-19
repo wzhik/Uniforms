@@ -296,7 +296,7 @@ function UniformsClass() {
         else if (target.hasClass('uniforms--popup') && (target.prop('tagName') == 'FORM')) {
 
             uniformsThis.form.root = target;
-            uniformsThis.form.container = target.parents('.uniforms-container');
+            uniformsThis.form.container = target.parents('.uniforms--popup__container');
             uniformsThis.form.typeObject = 'form-popup';
             uniformsThis.form.data.name = uniformsThis.form.root.find('[name=u-name]').val();
 
