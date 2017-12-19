@@ -11,7 +11,7 @@
                 foreach ($data as $key => $value) {
                     if (strpos($key, 'u-') !== false) {continue;}
                     switch ($key) {
-                        case 'name':
+                        case 'fio':
                             $label = 'Имя';
                             break;
                         case 'phone':
