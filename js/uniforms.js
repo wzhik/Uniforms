@@ -293,7 +293,7 @@ function UniformsClass() {
         }
 
         // нажата кнопка отправки popup формы
-        else if (target.hasClass('uniforms-popup') && (target.prop('tagName') == 'FORM')) {
+        else if (target.hasClass('uniforms--popup') && (target.prop('tagName') == 'FORM')) {
 
             uniformsThis.form.root = target;
             uniformsThis.form.container = target.parents('.uniforms-container');
@@ -356,7 +356,7 @@ function UniformsClass() {
             "dataType": "html",
             "success": function (data) {
                 uniformsThis.body.prepend(data);
-                uniformsThis.form.container = uniformsThis.body.find('.uniforms-popup__container');
+                uniformsThis.form.container = uniformsThis.body.find('.uniforms--popup__container');
                 uniformsThis.__ExecuterFunctions('open');
                 uniformsThis.__SendGoals('open');
                 uniformsThis.__Log('log', 'Форма показана');
