@@ -61,13 +61,13 @@ function UniformsClass() {
 
     // Загружует корзину из хранилица и преобразовывает в массив
     this.__LoadObject = function() {
-        return JSON.parse(localStorage.getItem('uniforms'));
+        return JSON.parse(sessionStorage.getItem('uniforms'));
     };
 
     // Сохраняет объект корзины в хранилице
     this.__SaveObject = function (object) {
         var json = JSON.stringify(object);
-        localStorage.setItem('uniforms', json);
+        sessionStorage.setItem('uniforms', json);
     };
 
     // Инициализирует систему при старте
@@ -141,19 +141,19 @@ function UniformsClass() {
 
             // Определяем местоположение
             if (uniformsThis.config.detectRegion) {
-                jQuery.getJSON('//ipinfo.io', function(data){
-                    // todo проверить пришли ли данные
-                    uniformsThis.userData.city = data.city;
-                    uniformsThis.userData.region = data.region;
-                    uniformsThis.userData.country = data.country;
-                    uniformsThis.userData.loc = data.loc;
+                jQuery.getJSON('https://ru.sxgeo.city/c85ew/json', function(data){
 
+                    uniformsThis.userData.city = data.city.name_ru;
+                    uniformsThis.userData.region = data.region.name_ru;
+                    uniformsThis.userData.country = data.country.name_ru;
+
+                    uniformsThis.__SaveObject(object);
                     uniformsThis.__Log('log', 'Местоположение определено');
                 });
-            }           
+            }
 
             object.userData = uniformsThis.userData;
-            uniformsThis.__SaveObject(object);          
+            uniformsThis.__SaveObject(object);
         }
 
 
@@ -208,6 +208,10 @@ function UniformsClass() {
                 func = uniformsEventFunctions[formName + '_afterSubmit'];
                 logMessage = uniformsThis.lang.logMessageAfterSend + formName;
                 break;
+            case 'errorSubmit':
+                func = uniformsEventFunctions[formName + '_errorSubmit'];
+                logMessage = uniformsThis.lang.logMessageAfterSend + formName;
+                break;
         }
 
         if (typeof func == 'function') {
@@ -220,17 +224,17 @@ function UniformsClass() {
     this.__FindYandexCounter = function () {
         var yandexCounter = false;
         var flgFindCounter = false;
-       
+
         for (el in window) {
-            if (el.indexOf('yaCounter') != -1) {               
+            if (el.indexOf('yaCounter') != -1) {
                 yandexCounter = window[el];
                 flgFindCounter = true;
             }
         }
         if (!flgFindCounter) {
             this.__Log('warn', 'Объект Яндекс.Метрики не найден');
-        }       
-      
+        }
+
         return yandexCounter;
     }
 
@@ -293,14 +297,17 @@ function UniformsClass() {
         }
 
         // нажата кнопка отправки popup формы
-        else if (target.hasClass('uniforms--popup') && (target.prop('tagName') == 'FORM')) {
+        else if (target.hasClass('uniforms--popup__form') && (target.prop('tagName') == 'FORM')) {
 
             uniformsThis.form.root = target;
-            uniformsThis.form.container = target.parents('.uniforms--popup__container');
+            uniformsThis.form.container = target.parents('.uniforms--popup');
             uniformsThis.form.typeObject = 'form-popup';
             uniformsThis.form.data.name = uniformsThis.form.root.find('[name=u-name]').val();
 
             uniformsThis.__SubmitForm();
+        }
+        else {
+            uniformsThis.__Log('warn','__Click: Не определено действие для события');
         }
     };
 
@@ -324,18 +331,18 @@ function UniformsClass() {
 
         var yandexCounter = uniformsThis.__FindYandexCounter();
 
-        if (yandexCounter !== false) {       
+        if (yandexCounter !== false) {
             yandexCounter.reachGoal(uniformsThis.form.data.name + yaLabelPrefix);
             uniformsThis.__Log('log', 'Отправлена цель: "' + uniformsThis.form.data.name + yaLabelPrefix + '"')
         }
-      
+
 
         // найдем счетчик аналитики
-        if (typeof ga == 'function' ) { 
+        if (typeof ga == 'function' ) {
             ga('send', 'event', 'form', gaEvent, uniformsThis.form.data.name, 1);
         }
         else {
-            this.__Log('warn', 'Код Goole Analytics не найден'); 
+            this.__Log('warn', 'Код Goole Analytics не найден');
         }
     };
 
@@ -356,7 +363,7 @@ function UniformsClass() {
             "dataType": "html",
             "success": function (data) {
                 uniformsThis.body.prepend(data);
-                uniformsThis.form.container = uniformsThis.body.find('.uniforms--popup__container');
+                uniformsThis.form.container = uniformsThis.body.find('.uniforms--popup');
                 uniformsThis.__ExecuterFunctions('open');
                 uniformsThis.__SendGoals('open');
                 uniformsThis.__Log('log', 'Форма показана');
@@ -415,6 +422,7 @@ function UniformsClass() {
                     uniformsThis.__EndForm(uniformsThis.config.closePopupFormTimeout);
                 } else {
                     uniformsThis.__FormFog('error');
+                    uniformsThis.__ExecuterFunctions('errorSubmit');
                     uniformsThis.__Log('warn', 'Форма не отправилась');
                     uniformsThis.__ShowErrorSlide();
                 }
