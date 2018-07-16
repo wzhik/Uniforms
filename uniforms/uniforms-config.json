@@ -1,0 +1,15 @@
+{
+  "debugMode": true,
+  "domain": "your-domain.example",
+  "successPageUrl": "",
+  "useSlides": true,
+  "processorUrl": "/ajax/uniforms.php",
+  "langsUrl": "/uniforms/langs/",
+  "jsUrl": "/js/",
+  "cssUrl": "/css/",
+  "detectRegion": true,
+  "sourceDetector": false,
+  "allowSendUser": false,
+  "closePopupFormTimeout": 3000,
+  "configLoaded": "yes"
+}
