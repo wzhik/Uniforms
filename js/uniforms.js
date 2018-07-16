@@ -1,6 +1,6 @@
 /**
  * @author Wzhik <design@uni-studio.ru>
- *
+ * @version 2.1.6 (16.07.18)
  *
  **/
 function NoEmpty(string) {
@@ -191,7 +191,7 @@ function UniformsClass() {
     this.__ExecuterFunctions = function (typeEvent) {
         if (typeof uniformsEventFunctions != 'object') { return; }
 
-        var formName = uniformsThis.form.data.name;
+        var formName = uniformsThis.form.data['u-name'];
         var func;
         var logMessage = '';
 
@@ -291,7 +291,7 @@ function UniformsClass() {
 
             uniformsThis.form.root = target;
             uniformsThis.form.typeObject = 'form-inline';
-            uniformsThis.form.data.name = uniformsThis.form.root.find('[name=u-name]').val();
+            uniformsThis.form.data['u-name'] = uniformsThis.form.root.find('[name=u-name]').val();
 
             uniformsThis.__SubmitForm();
         }
@@ -302,7 +302,7 @@ function UniformsClass() {
             uniformsThis.form.root = target;
             uniformsThis.form.container = target.parents('.uniforms--popup');
             uniformsThis.form.typeObject = 'form-popup';
-            uniformsThis.form.data.name = uniformsThis.form.root.find('[name=u-name]').val();
+            uniformsThis.form.data['u-name'] = uniformsThis.form.root.find('[name=u-name]').val();
 
             uniformsThis.__SubmitForm();
         }
@@ -332,14 +332,14 @@ function UniformsClass() {
         var yandexCounter = uniformsThis.__FindYandexCounter();
 
         if (yandexCounter !== false) {
-            yandexCounter.reachGoal(uniformsThis.form.data.name + yaLabelPrefix);
-            uniformsThis.__Log('log', 'Отправлена цель: "' + uniformsThis.form.data.name + yaLabelPrefix + '"')
+            yandexCounter.reachGoal(uniformsThis.form.data['u-name'] + yaLabelPrefix);
+            uniformsThis.__Log('log', 'Отправлена цель: "' + uniformsThis.form.data['u-name'] + yaLabelPrefix + '"')
         }
 
 
         // найдем счетчик аналитики
         if (typeof ga == 'function' ) {
-            ga('send', 'event', 'form', gaEvent, uniformsThis.form.data.name, 1);
+            ga('send', 'event', 'form', gaEvent, uniformsThis.form.data['u-name'], 1);
         }
         else {
             this.__Log('warn', 'Код Goole Analytics не найден');
