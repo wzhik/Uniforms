@@ -4,7 +4,58 @@
     clear: both;
 }
 
+
 .uniforms {
+
+    @clrText: white;
+    @clrBorder: #ffbc41;
+    @clrBackground: #ffbc41;
+    
+    @clrCloserNormal: #ff9d00;
+    @clrCloserActive: white;
+
+    @clrInputBorderNormal: transparent;
+    @clrInputBorderActive: #ff9d00;
+
+    @clrSubmitBackgroundNormal: #389f94;
+    @clrSubmitBackgroundActive:#226b63;
+
+    @heightFieldInput: 40px;
+
+    .mixFnt {
+        font-family: 'Exo 2', sans-serif;
+        font-weight: 400;
+    }
+    .mixFntBold {
+        font-family: 'Exo 2', sans-serif;
+        font-weight: 700;
+    }
+
+    .mixFnt;
+
+    fieldset {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+
+    &__h {
+        font-size: 3rem;
+        color:  @clrText;
+        display: block;
+        text-align: left;
+        margin: 0 0 20px 0;
+        text-transform: uppercase;
+    }
+
+    &__description {
+        color: @clrText;
+        font-size: 1.6rem;
+        display: block;
+        text-align: left;
+        margin: 0 0 30px 0;
+    }
     
     &__result-slide {
         position: absolute;
@@ -38,22 +89,43 @@
     }
 
     &__field-group {
-        width: 280px;
-        margin: 0 0 20px 20px;
+        margin: 0 0 20px 0;
     
         &__label {
-            display: none;
-            margin-bottom: 3px;
+            .mixFntBold;
+
+            margin-bottom: 5px;
             font-size: 1.6rem;
+            display: block;
+            color: @clrText;
         }
         &__input {
-            padding: 0 20px;
-            width: calc(~"100% - 40px");
-            font-size: 20px;
-            border-radius: 10px;
-            border: 1px solid #DFE6E7;
-            height: 60px;
-            line-height: 60px;
+            padding: 0 15px;
+            width: calc(~"100% - 30px");
+            font-size: 1.6rem;
+            border: 2px solid @clrInputBorderNormal;
+            height: @heightFieldInput;
+            line-height: @heightFieldInput;
+            text-align: left;
+            transition: linear all 0.3s;
+
+            &:hover, &:focus {
+                border-color: @clrInputBorderActive;
+            }
+        }
+        &__textarea {
+            padding: 3px 15px;
+            width: calc(~"100% - 30px");
+            font-size: 1.6rem;
+            border: 2px solid @clrInputBorderNormal;
+            line-height: 1.4;
+            text-align: left;
+            max-width: calc(~"100% - 30px");
+            min-width: calc(~"100% - 30px"); 
+            
+            &:hover, &:focus {
+                border-color: @clrInputBorderActive;
+            }
         }
     
     
@@ -78,6 +150,31 @@
             transform: scale(1.2);
             margin: 0 10px 0 0;
             line-height: 1.2;
+        }
+    }
+
+    &__submit-block {
+        text-align: center;
+    }
+
+    &__button-submit {
+        .mixFntBold;
+
+        font-size: 1.6rem;
+        text-transform: uppercase;
+        display: inline-block;
+        border: none;
+        background: @clrSubmitBackgroundNormal;
+        height: @heightFieldInput;
+        line-height: @heightFieldInput;
+        text-align: center;
+        color: @clrText;
+        padding: 0 20px;
+        transition: linear all 0.3s;
+        cursor: pointer;
+
+        &:hover {
+            background: @clrSubmitBackgroundActive;
         }
     }
 
@@ -158,20 +255,26 @@
     
         &__closer {
             position: absolute;
-            color: #FF9D00;
+            color: @clrCloserNormal;
             font-size: 30px;
             font-weight: 700;
             right: 0;
             top: 0px;
             font-family: sans-serif;
             cursor: pointer;
+            transition: linear all 0.3s;
+
+            &:hover {
+                color: @clrCloserActive;
+            }
         }
         &__wrapper-form {
-            background: white;
+            background: @clrBackground;
             position: relative;
             z-index: 35200;
             width: 320px;
-            border: 10px solid #FFCF00;
+            padding: 30px;
+            border: 10px solid @clrBorder;
         }
     }
 }
