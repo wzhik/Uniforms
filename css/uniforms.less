@@ -7,20 +7,31 @@
 
 .uniforms {
 
+	// form config
     @clrText: white;
     @clrBorder: #ffbc41;
+    @borderWidth: 10px;
     @clrBackground: #ffbc41;
+
     
+    // closer
     @clrCloserNormal: #ff9d00;
     @clrCloserActive: white;
 
+    // fields config
     @clrInputBorderNormal: transparent;
     @clrInputBorderActive: #ff9d00;
+    @heightFieldInput: 40px;
 
+	// submit button
     @clrSubmitBackgroundNormal: #389f94;
     @clrSubmitBackgroundActive:#226b63;
 
-    @heightFieldInput: 40px;
+	// result fog
+    @clrResultFogInfo: blue;
+    @clrResultFogSuccess: green;
+    @clrResultFogError: red;
+
 
     .mixFnt {
         font-family: 'Exo 2', sans-serif;
@@ -189,13 +200,13 @@
         left: 0;
 
         &--info {
-            background-color: rgba(0, 0, 255, 0.7);
+            background-color: @clrResultFogInfo;
         }
         &--success {
-            background-color: rgba(0, 128, 0, 0.7);
+            background-color: @clrResultFogSuccess;
         }
         &--error {
-            background-color: rgba(255, 0, 0, 0.7);
+            background-color: @clrResultFogError;
         }
 
         &__label {
@@ -274,7 +285,7 @@
             z-index: 35200;
             width: 320px;
             padding: 30px;
-            border: 10px solid @clrBorder;
+            border: @borderWidth solid @clrBorder;
         }
     }
 }
