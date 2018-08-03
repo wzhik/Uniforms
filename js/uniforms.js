@@ -141,7 +141,7 @@ function UniformsClass() {
 
             // Определяем местоположение
             if (uniformsThis.config.detectRegion) {
-                jQuery.getJSON('https://ru.sxgeo.city/c85ew/json', function(data){
+                jQuery.getJSON('https://ru.sxgeo.city/json', function(data){
 
                     uniformsThis.userData.city = data.city.name_ru;
                     uniformsThis.userData.region = data.region.name_ru;
