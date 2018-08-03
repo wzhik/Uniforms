@@ -301,6 +301,7 @@ class UniSourceDetector {
             'source'        => $this->source,
             'keywords'      => $this->keywords,
             'arrUTM'        => $this->utm,
+            'userIP'        => $this->userIP,
         )), time() + $this->timeoutCookie, '/');
     }
 
@@ -315,6 +316,7 @@ class UniSourceDetector {
         $this->source = $arr['source'];
         $this->keywords = $arr['keywords'];
         $this->utm = $arr['arrUTM'];
+        $this->userIP = $arr['userIP'];
     }
 
     // Сохраняет лог отладочной информации если разрешено в настройках класса
