@@ -29,6 +29,7 @@ class UniSourceDetector {
     private $timeEnter;
     private $source;
     private $keywords;
+    private $utm = array();
 
     // Массивы хостов поисковых систем
     private $yandexHosts        = array('yandex.ru','www.yandex.ru','yabs.yandex.ru');                                  // возможные хосты поисковика яндекса
@@ -62,14 +63,15 @@ class UniSourceDetector {
 
     // Вернет массив данных о входе
     public function GetAll() {
-        return array(
-            'arrQuery'      => $this->arrQuery,
-            'arrRef'        => $this->arrRef,
-            'sessionId'     => $this->sessionId,
-            'searchEngine'  => $this->searchEngine,
-            'timeEnter'     => $this->timeEnter,
-            'source'        => $this->source,
-            'keywords'      => $this->keywords,
+        return array(           
+            'sd-sessionID'     => $this->sessionId,
+            'sd-searchEngine'  => $this->searchEngine,
+            'sd-timeEnter'     => $this->timeEnter,
+            'sd-source'        => $this->source,
+            'sd-keywords'      => $this->keywords,
+            'sd-IPAddress'     => $this->userIP,
+            'sd-utm'           => $this->utm,
+            'sd-fullQuery'     => $this->arrQuery,
         );
     }
 
@@ -86,7 +88,6 @@ class UniSourceDetector {
     //
     // Основные методы
     //
-
     // Получает исходные данные
     private function GetSourceData() {
         $this->rawRef = $_SERVER['HTTP_REFERER'];
@@ -102,7 +103,7 @@ class UniSourceDetector {
         $this->timeEnter = date('d.m.Y H:i:s');
     }
 
-    // Обрабатывает исходные даннык
+    // Обрабатывает исходные данные
     private function ProcSourceData() {
 
         // Разбираем реферальную строку
@@ -116,6 +117,9 @@ class UniSourceDetector {
         $this->arrQuery['host'] = $tmp['host'];
         $this->arrQuery['path'] = $tmp['path'];
         $this->arrQuery['query'] = $this->StringQueryToArray($tmp['query']);
+
+        // Получим UTM
+        $this->GetUTM();
 
         // Определяем поисковую систему
         $this->DetectSearchEngine();
@@ -296,6 +300,7 @@ class UniSourceDetector {
             'timeEnter'     => $this->timeEnter,
             'source'        => $this->source,
             'keywords'      => $this->keywords,
+            'arrUTM'        => $this->utm,
         )), time() + $this->timeoutCookie, '/');
     }
 
@@ -309,6 +314,7 @@ class UniSourceDetector {
         $this->timeEnter = $arr['timeEnter'];
         $this->source = $arr['source'];
         $this->keywords = $arr['keywords'];
+        $this->utm = $arr['arrUTM'];
     }
 
     // Сохраняет лог отладочной информации если разрешено в настройках класса
@@ -331,4 +337,13 @@ class UniSourceDetector {
             file_put_contents($filePath, $str, FILE_APPEND);
         }
     }
+
+    // Выберем UTM метки в отдельный массив
+    private function GetUTM() {
+        foreach($this->arrQuery['query'] as $name => $value) {
+            if (strpos($name, 'utm_') === false) { continue; }
+            $this->utm[$name] = $value;
+        }
+    }
 }
+

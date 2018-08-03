@@ -140,34 +140,64 @@
         <?php } ?>
 
 
-        <?php if (!empty($data['source_text'])) { ?>
-        <tr>
-            <th colspan="2" style="text-align: left;border: 1px solid;background: #e6e6e6;">Источник пользователя</th>
-        </tr>
-        <tr>
-            <th style="width: 200px;text-align:right;">Источник:</th>
-            <td align="left"><?php echo $data['source_text']?></td>
-        </tr>
-        <tr>
-            <th style="width: 200px;text-align:right;">Поисковый запрос:</th>
-            <td align="left"><?php echo $data['source_query']?></td>
-        </tr>
-        <tr>
-            <th style="width: 200px;text-align:right;">Рекламное объявление:</th>
-            <td align="left"><?php echo $data['source_company']?></td>
-        </tr>
-        <tr>
-            <th style="width: 200px;text-align:right;">ID сессии:</th>
-            <td align="left"><?php echo $data['source_idsess']?></td>
-        </tr>
-        <tr>
-            <th style="width: 200px;text-align:right;">Динамические параметры:</th>
-            <td align="left"><?php echo $data['source_utm']?></td>
-        </tr>
-        <tr>
-            <td colspan="2" align="right"> <sup> ip: <?php echo $data['ipAddress']?>; Дата и время:<strong><?php echo date('d.m.Y H:i')?></strong> </sup>   </td>
-        </tr>
-        <?php } ?>
+        <? if (!empty($data['sd-source'])) { ?>
+            <tr>
+                <th colspan="2" style="text-align: left;border: 1px solid;background: #e6e6e6;">Источник пользователя</th>
+            </tr> 
+            <tr>
+                <th style="width: 200px;text-align:right;">ID сессии:</th>
+                <td align="left"><?php echo $data['sd-sessionID'] ?></td>
+            </tr>
+            <tr>
+                <th style="width: 200px;text-align:right;">Время первого входа:</th>
+                <td align="left"><?php echo $data['sd-timeEnter'] ?></td>
+            </tr>      
+            <tr>
+                <th style="width: 200px;text-align:right;">Источник:</th>
+                <td align="left"><?php echo $data['sd-source'] ?></td>
+            </tr>
+
+
+            <?php if (!empty($data['sd-keywords'])) { ?>
+                <tr>
+                    <th style="width: 200px;text-align:right;">Ключевые слова:</th>
+                    <td align="left"><?php echo $data['sd-keywords'] ?></td>
+                </tr>
+            <?php } ?>
+
+            <?php if (count($data['sd-utm'])) { ?>
+                <tr>
+                    <th style="width: 200px;text-align:right;">UTM метки:</th>
+                    <td align="left">
+                        <?php
+                            foreach($data['sd-utm'] as $name => $value) { ?>
+                                <p><strong><?php echo $name?>:</strong> <?php echo $value ?></p>
+                        <?php } ?>
+                    </td>
+                </tr>
+            
+            <?php } ?>
+        
+            <?php if (count($data['sd-fullQuery'])) { ?>
+                <tr>
+                    <th style="width: 200px;text-align:right;">Полный массив запроса:</th>
+                    <td align="left">
+                        <?php
+                            foreach($data['sd-fullQuery'] as $name => $value) { ?>
+                                <?php if ($name == 'query') { ?>
+                                    <p><strong><?php echo $name?>:</strong> <?php print_r($value) ?></p>
+                                <?php } else { ?>
+                                    <p><strong><?php echo $name?>:</strong> <?php echo $value ?></p>
+                                <?php } ?>
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php } ?>
+            
+            <tr>
+                <td colspan="2" align="right"> <sup> ip: <?php echo $data['sd-IPAddress'] ?>; Дата и время отправки заявки:<strong><?=date('d.m.Y H:i')?></strong></sup></td>
+            </tr>
+        <? } ?>
         </tbody>
     </table>
 </div>

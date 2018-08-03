@@ -2,6 +2,8 @@
 
 define('TRUE_IN', true);
 
+session_start();
+
 require getenv('DOCUMENT_ROOT').'/uniforms/classes/uniforms.class.php';
 
 $uniforms = new UniformsClass(array(

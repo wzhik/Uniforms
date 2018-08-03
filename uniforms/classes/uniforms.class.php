@@ -116,6 +116,7 @@ class UniformsClass {
             if (file_exists($path)) {
                 $this->config['sourceDetectorPath'] = $path;
                 $this->config['sourceDetectorStatus'] = true;
+                $this->LoadSourceData(); // Получим данные от источника
             }
             else {
                 $this->config['sourceDetectorStatus'] = false;
@@ -204,8 +205,6 @@ class UniformsClass {
 
         $sourceDetector = new UniSourceDetector();
         $this->sourceData = $sourceDetector->GetAll();
-
-
     }
 
 
@@ -466,4 +465,3 @@ class UniformsClass {
         $this->MailSend();
     }
 }
-
