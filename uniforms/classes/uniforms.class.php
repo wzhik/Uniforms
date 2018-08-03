@@ -381,6 +381,7 @@ class UniformsClass {
 
 
             // ПОИСК ПОЛУЧАТЕЛЕЙ
+             // TODO   Вот это вызывает предупреждение |  (count(...))   
             if (!empty($this->request['u-name']) && count($this->config['forms'][$this->request['u-name']])) {
 
                 // ПОИСК ПОЛУЧАТЕЛЕЙ
