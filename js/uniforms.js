@@ -138,6 +138,7 @@ function UniformsClass() {
         else {
             uniformsThis.userData.lastAccess = currTimeStamp;
             uniformsThis.userData.langUser = window.navigator.language || navigator.userLanguage;
+            if (uniformsThis.userData.langUser == 'ru-RU') { uniformsThis.userData.langUser = 'ru'; }
 
             // Определяем местоположение
             if (uniformsThis.config.detectRegion) {
