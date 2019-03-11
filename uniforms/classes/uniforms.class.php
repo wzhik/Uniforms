@@ -105,6 +105,7 @@ class UniformsClass {
         if (isset($arrInit['forms'])) { $this->config['forms'] = $arrInit['forms']; }
         if (isset($arrInit['default'])) { $this->config['default'] = $arrInit['default']; }
         if (isset($arrInit['sender'])) { $this->config['sender'] = $arrInit['sender']; }
+        if (isset($arrInit['token'])) {$this->config['token'] = $arrInit['token']; }
 
         // todo БЛОК DEFAULT ДОЛЖЕН БЫТЬ ОБЯЗАТЕЛЬНЫМ НЕОБХОДИМО ПРОВЕРИТЬ ЧТОБЫ БЫЛИ ЗАДАНЫ ДЕФОЛТНАЯ ТЕМА И ПОЛУЧАТЕЛЕИ
         // todo Необходимо проверить все необходимые параметры в блоке sender
@@ -145,7 +146,35 @@ class UniformsClass {
 
         $this->FinalyConfig();
 
+        $this->ServerSend();
+
         $this->MailSend();
+    }
+
+
+    /**
+     * Отправит заявку на сервер uniforms
+     */
+    private function ServerSend() {
+        // Если не задан token то ни чего не отправляем на сервер
+        if (!isset($this->config['token'])) { return false; }
+
+        $arRAW = $this->request;
+        $arRAW['client-ip-address'] = $_SERVER['REMOTE_ADDR'];
+        $arRAW['client-domain'] = $_SERVER['SERVER_NAME'];
+        $uniserverData = array(
+            'token'     =>  $this->config['token'],
+            'pid'       =>  $_POST['u-pid'],
+            'phone'     =>  $_POST['phone'],
+            'email'     =>  $_POST['email'],
+            'name'      =>  $_POST['fio'],
+            'city'      =>  $_POST['u-city'],
+            'region'    =>  $_POST['u-region'],
+            'country'   =>  $_POST['u-country'],
+            'data'      =>  $arRAW,
+        );       
+
+        file_get_contents('http://uniforms-server.uni-studio.ru/api/request?' . http_build_query($uniserverData));
     }
 
 
@@ -205,6 +234,22 @@ class UniformsClass {
 
         $sourceDetector = new UniSourceDetector();
         $this->sourceData = $sourceDetector->GetAll();
+
+        if (strpos($this->sourceData['sd-source'], 'Переход по рекламе') !== false) {
+            $this->sourceData['sd-source-type'] = 'ad';
+        }
+        if (strpos($this->sourceData['sd-source'], 'Переход из источника') !== false) {
+            $this->sourceData['sd-source-type'] = 'referral';
+        }
+        if (strpos($this->sourceData['sd-source'], 'Переход из поиска') !== false) {
+            $this->sourceData['sd-source-type'] = 'organic';
+        }
+        if (strpos($this->sourceData['sd-source'], 'Переход с сайта') !== false) {
+            $this->sourceData['sd-source-type'] = 'referral';
+        }
+        if (strpos($this->sourceData['sd-source'], 'прямой заход') !== false) {
+            $this->sourceData['sd-source-type'] = 'direct';
+        }        
     }
 
 

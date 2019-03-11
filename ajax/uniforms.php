@@ -7,6 +7,7 @@ session_start();
 require getenv('DOCUMENT_ROOT').'/uniforms/classes/uniforms.class.php';
 
 $uniforms = new UniformsClass(array(
+    'token' => '****************************',
     'default' => array(
         'recipients'        => array('design@uni-studio.ru'),
         'mailSubject'       => 'Дефолтная тема письма',
