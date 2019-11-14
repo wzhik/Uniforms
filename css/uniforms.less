@@ -115,7 +115,7 @@
         }
         &__input {
             padding: 0 15px;
-            width: calc(~"100% - 30px");
+            width: 100%;
             font-size: 1.6rem;
             border: 2px solid @clrInputBorderNormal;
             height: @heightFieldInput;
@@ -123,6 +123,7 @@
             text-align: left;
             transition: linear all 0.3s;
             color: @clrInputText;
+            box-sizing: border-box;
 
             &:hover, &:focus {
                 border-color: @clrInputBorderActive;
@@ -130,13 +131,12 @@
         }
         &__textarea {
             padding: 3px 15px;
-            width: calc(~"100% - 30px");
+            width: 100%;
             font-size: 1.6rem;
             border: 2px solid @clrInputBorderNormal;
             line-height: 1.4;
             text-align: left;
-            max-width: calc(~"100% - 30px");
-            min-width: calc(~"100% - 30px"); 
+            resize: vertical;
             
             &:hover, &:focus {
                 border-color: @clrInputBorderActive;
@@ -153,16 +153,16 @@
             display: block;
         }
         &__radio-label {
-            
-            line-height: 1.2;
+            line-height: 20px;
             font-size: 1.6rem;
             vertical-align: top;
+            margin: 0;
+            height: 20px;
         }
         &__radio {
-            vertical-align: bottom;
             transform: scale(1.2);
             margin: 0 10px 0 0;
-            line-height: 1.2;
+            height: 20px;
         }
 
         &__description {
