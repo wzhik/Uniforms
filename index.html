@@ -53,8 +53,29 @@
                         <input type="text" id="lbMessage" name="message" class="uniforms__field-group__input">
                     </div>
 
+                    <!-- Радио-поле-->
+                    <div class="uniforms__field-group">
+                        <div class="uniforms__radio-group__radio-wrapper">
+                            <input id="lbType1" type="radio" value="Стандарт" class="uniforms__field-group__radio" name="type">
+                            <label for="lbType1" class="uniforms__field-group__radio-label">Стандарт</label>
+                        </div>
+                        <div class="uniforms__radio-group__radio-wrapper">
+                            <input id="lbType1" type="radio" value="Бизнес" class="uniforms__field-group__radio" name="type">
+                            <label for="lbType1" class="uniforms__field-group__radio-label">Бизнес</label>
+                        </div>
+                        <div class="uniforms__radio-group__radio-wrapper">
+                            <input id="lbType1" type="radio" value="Премиум" class="uniforms__field-group__radio" name="type">
+                            <label for="lbType1" class="uniforms__field-group__radio-label">Премиум</label>
+                        </div>
+                    </div>
+
                     <div class="uniforms__submit-block">
                         <button class="uniforms__button-submit">Отправить</button>
+                    </div>
+
+                    <div class="uniforms__agremeent">
+	                    <input required="" name="pd" checked="checked" value="" autocomplite="off" type="checkbox" class="uniforms__agremeent__checkbox">
+	                    <p class="uniforms__agremeent__text">Я даю свое <a href="/permission_personal_data.html" target="_blank">согласие на обработку моих персональных данных</a>.</p>
                     </div>
                 </fieldset>
             </form>          
