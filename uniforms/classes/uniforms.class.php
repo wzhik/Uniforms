@@ -230,7 +230,7 @@ class UniformsClass {
         // Если не удалось подключить определитель источника то завершаемся
         if (!$this->config['sourceDetectorStatus']) { return; }
 
-        require $this->config['sourceDetectorPath'];
+        require_once $this->config['sourceDetectorPath'];
 
         $sourceDetector = new UniSourceDetector();
         $this->sourceData = $sourceDetector->GetAll();
