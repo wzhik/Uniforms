@@ -430,8 +430,6 @@ function UniformsClass() {
             }
         });
 
-        uniformsThis.__SendGoals('submit');
-
         uniformsThis.__FormUnBlockElements();
 
         return false;
