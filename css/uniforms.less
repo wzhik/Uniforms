@@ -113,6 +113,7 @@
             display: block;
             color: @clrText;
         }
+
         &__input {
             padding: 0 15px;
             width: 100%;
@@ -129,6 +130,7 @@
                 border-color: @clrInputBorderActive;
             }
         }
+
         &__textarea {
             padding: 3px 15px;
             width: 100%;
@@ -291,7 +293,8 @@
             background: @clrBackground;
             position: relative;
             z-index: 35200;
-            width: 320px;
+            width: 100%;
+            max-width: 400px;
             padding: 30px;
             border: @borderWidth solid @clrBorder;
         }
