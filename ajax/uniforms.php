@@ -14,7 +14,7 @@ $uniforms = new UniformsClass(array(
         'mailDescription'   => 'Дефолтное описание',
     ),
     'sender' => array(
-        'type' => 'hosting',
+        'type' => 'hosting', // hosting | phpmailer | none - способ отправки писем,  средствами хостинга, через phpmailer, не отправлять
     ),
     'profiles' => array(
         1 => array(

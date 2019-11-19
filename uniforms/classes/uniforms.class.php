@@ -275,9 +275,6 @@ class UniformsClass {
                 break;
         }
 
-
-
-
         if ($this->config['sender']['type'] == 'hosting') {
 
             $headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -340,6 +337,12 @@ class UniformsClass {
                 $resultSend = json_encode(array('status' => '0', 'message' => $mailer->ErrorInfo));
             }
         }
+
+        // Не отправляем письма
+        if ($this->config['sender']['type'] == 'none') {
+            $resultSend = json_encode(array('status' => '1'));
+        }
+
         $this->SendJSON($resultSend);
     }
 
