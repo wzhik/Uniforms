@@ -60,7 +60,7 @@ class UniformsClass {
 
 
 
-    /**     
+    /**
      *  Выберет тип действия
      */
     private function ChangeAction() {
@@ -165,14 +165,14 @@ class UniformsClass {
         $uniserverData = array(
             'token'     =>  $this->config['token'],
             'pid'       =>  $_POST['u-pid'],
-            'phone'     =>  $_POST['phone'],
-            'email'     =>  $_POST['email'],
-            'name'      =>  $_POST['fio'],
-            'city'      =>  $_POST['u-city'],
-            'region'    =>  $_POST['u-region'],
-            'country'   =>  $_POST['u-country'],
+            'phone'     =>  isset($_POST['phone']) ? $_POST['phone'] : '',
+            'email'     =>  isset($_POST['email']) ? $_POST['email'] : '',
+            'name'      =>  isset($_POST['fio']) ? $_POST['fio'] : '',
+            'city'      =>  isset($_POST['u-city']) ? $_POST['u-city'] : '',
+            'region'    =>  isset($_POST['u-region']) ? $_POST['u-region'] : '',
+            'country'   =>  isset($_POST['u-country']) ? $_POST['u-country'] : '',
             'data'      =>  $arRAW,
-        );       
+        );
 
         file_get_contents('http://uniforms-server.uni-studio.ru/api/request?' . http_build_query($uniserverData));
     }
@@ -249,7 +249,7 @@ class UniformsClass {
         }
         if (strpos($this->sourceData['sd-source'], 'прямой заход') !== false) {
             $this->sourceData['sd-source-type'] = 'direct';
-        }        
+        }
     }
 
 
@@ -270,7 +270,7 @@ class UniformsClass {
             case 'sendorder':
                 $mailHTML = $this->MailSend__GetTemplate('_operator-mail-order');
                 break;
-            default: 
+            default:
                 $this->SendJSON(json_encode(array('status' => 0, 'message' => 'action not select')));
                 break;
         }
@@ -396,7 +396,7 @@ class UniformsClass {
         }
 
         if ($this->request['u-at'] == 'sendorder') {
-          
+
             if (empty($this->request['u-data']['buyer']['phone']) && empty($this->request['u-data']['buyer']['email'])) {
                 $this->SendBadRequest('empty contact data');
             }
@@ -428,8 +428,7 @@ class UniformsClass {
 
 
             // ПОИСК ПОЛУЧАТЕЛЕЙ
-             // TODO   Вот это вызывает предупреждение |  (count(...))   
-            if (!empty($this->request['u-name']) && count($this->config['forms'][$this->request['u-name']])) {
+            if (isset($this->config['forms']) && ( !empty($this->request['u-name']) && count($this->config['forms'][$this->request['u-name']]) ) ) {
 
                 // ПОИСК ПОЛУЧАТЕЛЕЙ
                 // если есть в секции именной формы есть настройка получателей
