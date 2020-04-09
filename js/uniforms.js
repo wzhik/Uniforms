@@ -20,8 +20,7 @@ function UniformsClass() {
     // Объект содержащий конфиг всей системы
     this.config = {
         debugMode: false,
-        cartMode: false,
-        yandexCounterStr: ''
+        cartMode: false
     };
 
     // Объект с данными о текущей странице
@@ -221,24 +220,6 @@ function UniformsClass() {
         }
     };
 
-    // Ищет счетчик ЯндексМетрики
-    this.__FindYandexCounter = function () {
-        var yandexCounter = false;
-        var flgFindCounter = false;
-
-        for (el in window) {
-            if (el.indexOf('yaCounter') != -1) {
-                yandexCounter = window[el];
-                flgFindCounter = true;
-            }
-        }
-        if (!flgFindCounter) {
-            this.__Log('warn', 'Объект Яндекс.Метрики не найден');
-        }
-
-        return yandexCounter;
-    }
-
     // Подготавливает все необходимые данные для отправки формы
     // actionType - show | send
     this.__PrepareSubmitData = function (actionType) {
@@ -314,7 +295,7 @@ function UniformsClass() {
 
     // По возвожности отправляет события в метрику и аналитику
     this.__SendGoals = function (insideEvent) {
-        var yaLabelPrefix, gaEvent, yandexCounter;
+        var yaLabelPrefix, gaEvent;
         switch (insideEvent) {
             case 'open':        // открытие формы
                 yaLabelPrefix = '_open';
@@ -330,13 +311,14 @@ function UniformsClass() {
                 break;
         }
 
-        var yandexCounter = uniformsThis.__FindYandexCounter();
+        if (typeof ym == 'function') {
 
-        if (yandexCounter !== false) {
-            yandexCounter.reachGoal(uniformsThis.form.data['u-name'] + yaLabelPrefix);
-            uniformsThis.__Log('log', 'Отправлена цель: "' + uniformsThis.form.data['u-name'] + yaLabelPrefix + '"')
+            ym(/* номер_счетчика */, 'reachGoal', uniformsThis.form.data['u-name'] + yaLabelPrefix);
+
+            this.__Log('warn', 'Событие ' + uniformsThis.form.data['u-name'] + yaLabelPrefix + ' отправлено в Яндекс.Метрику');
+        } else {
+            this.__Log('warn', 'Код Яндекс.Метрики не найден');
         }
-
 
         // найдем счетчик аналитики
         if (typeof ga == 'function' ) {
