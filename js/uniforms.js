@@ -1,3 +1,8 @@
+/**
+ * Класс Uniforms v2.210603
+ * 
+ */
+
 function NoEmpty(string) {
     var out = true;
     if ((string === null)||(string === '')||(typeof(string) === "undefined")) {
@@ -514,6 +519,57 @@ function UniformsClass() {
             uniformsThis.form.fog.remove();
         }
         catch (e) {}
+    };
+
+
+    //--------------- Публичные методы ----------------
+    
+    /**
+     * Метод покажет форму в соответствии с переданными параметрами
+     * 
+     * Пример вызова:
+     *  uniforms.ShowForm({
+     *      pid: 2,
+     *      name: 'widgetManuals',
+     *      subject: 'Скачать методичку',
+     *      description: 'подробное описание формы',
+     *      data: {
+     *          fileLink: fileURL
+     *      }
+     *  });
+     * 
+     * В подмассиве data перечисляются data-поля их значения которые требуется передать в форму. Data-поля присваиваются тегу form
+     */
+    this.ShowForm = function (arData) {
+
+        var params = [
+            {name: 'u-name', value: arData['name']},
+            {name: 'u-subject', value: arData['subject']},
+            {name: 'u-pid', value: arData['pid']},
+            {name: 'u-description', value: arData['description']},
+            {name: 'u-at', value: 'show'}
+        ];
+
+        jQuery.ajax({
+            "url": uniformsThis.config.processorUrl,
+            "type": "POST",
+            "data": params,
+            "dataType": "html",
+            "success": function (data) {
+                uniformsThis.body.prepend(data);
+               
+                jForm = uniformsThis.body.find('.uniforms--popup__form');
+
+                for (dataPropName in arData['data']) {
+                    console.log(dataPropName);
+                    jForm.data(dataPropName, arData['data'][dataPropName]);
+                }
+
+                uniformsThis.__ExecuterFunctions('open');
+                uniformsThis.__SendGoals('open');
+                uniformsThis.__Log('log', 'Форма показана');
+            }
+        });
     };
 
 
