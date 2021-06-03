@@ -1,8 +1,3 @@
-/**
- * @author Wzhik <design@uni-studio.ru>
- * @version 2.1.6 (16.07.18)
- *
- **/
 function NoEmpty(string) {
     var out = true;
     if ((string === null)||(string === '')||(typeof(string) === "undefined")) {
@@ -58,12 +53,12 @@ function UniformsClass() {
         }
     };
 
-    // Загружует корзину из хранилица и преобразовывает в массив
+    // Загружает корзину из хранилища и преобразовывает в массив
     this.__LoadObject = function() {
         return JSON.parse(sessionStorage.getItem('uniforms'));
     };
 
-    // Сохраняет объект корзины в хранилице
+    // Сохраняет объект корзины в хранилище
     this.__SaveObject = function (object) {
         var json = JSON.stringify(object);
         sessionStorage.setItem('uniforms', json);
@@ -121,7 +116,7 @@ function UniformsClass() {
         this.page.pageTitle =  jQuery('title').html();
     };
 
-    // Либо загружает данные из localStorage, либо получает их заного
+    // Либо загружает данные из localStorage, либо получает их заново
     this.__InitUserData = function () {
         var object = uniformsThis.__LoadObject();
 
@@ -293,7 +288,7 @@ function UniformsClass() {
         }
     };
 
-    // По возвожности отправляет события в метрику и аналитику
+    // По возможности отправляет события в метрику и аналитику
     this.__SendGoals = function (insideEvent) {
         var yaLabelPrefix, gaEvent;
         switch (insideEvent) {
@@ -325,7 +320,7 @@ function UniformsClass() {
             ga('send', 'event', 'form', gaEvent, uniformsThis.form.data['u-name'], 1);
         }
         else {
-            this.__Log('warn', 'Код Goole Analytics не найден');
+            this.__Log('warn', 'Код Google Analytics не найден');
         }
     };
 
