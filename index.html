@@ -3,147 +3,96 @@
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
-        <link rel="stylesheet" href="/css/uniforms.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton-framework/1.1.1/skeleton.min.css">
+        
     </head>
     <body>
-        <h1>Примеры использования форм</h1>
+        <div class="container">
+            <h1>Примеры использования форм</h1>
 
-        <section>
-            <h2>Инлайн формы</h2>          
-            <form action="" class="uniforms uniforms--inline">
-                <!-- Слайд успешной отправки формы. Показывается в случае успешной отправки -->
-                <div class="uniforms__result-slide uniforms__result-slide--success">
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
-                        <span class="uniforms__result-slide__h">Успешно отправлено</span>
-                        <span class="uniforms__result-slide__text">Ваша заявка отправлена, оператор свяжется с вами.</span>
-                    </div>
-                </div>
-
-                <!-- Слайд ошибки при отпрвке. Показывается если сервер сообщил об ошибке или при других причинах -->
-                <div class="uniforms__result-slide uniforms__result-slide--error">      
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
-                        <span class="uniforms__result-slide__h">Что-то пошло не так</span>
-                        <span class="uniforms__result-slide__text">Не удалось отправить заявку, свяжитесь с нами по телефону.</span>
-                    </div>
-                </div>
-
-                <fieldset>
-                    <!-- Скрытые поля настройки формы -->
-                    <input type="hidden" name="u-name" value="test-inline-form">
-                    <input type="hidden" name="u-pid" value="1">
-                    <input type="hidden" name="u-subject" value="тема письма">
-                    <input type="hidden" name="u-description" value="описание заявки в теле письма">
-                    <input type="hidden" name="u-extdata" value="расширенные данные">
-
-                    <!-- Проверочное поле, оно всегда должно быть пустым. Проверяем на сервере, отдаем успешный код но ни чего не отправляем -->
-                    <div class="uniforms__field-group--hidden">
-                        <input type="text" name="name" value="">
-                    </div>
-
-                    <!-- Поле ввода обязательное -->
-                    <div class="uniforms__field-group">
-                        <label for="lbName" class="uniforms__field-group__label uniforms__field-group__label--required">Как вас зовут</label>
-                        <input type="text" id="lbName" placeholder="Ваше имя" required="required" name="fio" class="uniforms__field-group__input">
-                        <span class="uniforms__field-error-label"></span>
-                    </div>
-
-                    <!-- Поле ввода не обязательное -->
-                    <div class="uniforms__field-group">
-                        <label for="lbMessage" class="uniforms__field-group__label">Примечание</label>
-                        <input type="text" id="lbMessage" name="message" class="uniforms__field-group__input">
-                    </div>
-
-                    <!-- Радио-поле-->
-                    <div class="uniforms__field-group">
-                        <div class="uniforms__radio-group__radio-wrapper">
-                            <input id="lbType1" type="radio" value="Стандарт" class="uniforms__field-group__radio" name="type">
-                            <label for="lbType1" class="uniforms__field-group__radio-label">Стандарт</label>
-                        </div>
-                        <div class="uniforms__radio-group__radio-wrapper">
-                            <input id="lbType1" type="radio" value="Бизнес" class="uniforms__field-group__radio" name="type">
-                            <label for="lbType1" class="uniforms__field-group__radio-label">Бизнес</label>
-                        </div>
-                        <div class="uniforms__radio-group__radio-wrapper">
-                            <input id="lbType1" type="radio" value="Премиум" class="uniforms__field-group__radio" name="type">
-                            <label for="lbType1" class="uniforms__field-group__radio-label">Премиум</label>
+            <section>
+                <h2>Инлайн формы</h2>          
+                <form action="" class="uniforms uniforms--inline">
+                    <!-- Слайд успешной отправки формы. Показывается в случае успешной отправки -->
+                    <div class="uniforms__result-slide uniforms__result-slide--success">
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                            <span class="uniforms__result-slide__h">Успешно отправлено</span>
+                            <span class="uniforms__result-slide__text">Ваша заявка отправлена, оператор свяжется с вами.</span>
                         </div>
                     </div>
 
-                    <div class="uniforms__submit-block">
-                        <button class="uniforms__button-submit">Отправить</button>
+                    <!-- Слайд ошибки при отпрвке. Показывается если сервер сообщил об ошибке или при других причинах -->
+                    <div class="uniforms__result-slide uniforms__result-slide--error">      
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                            <span class="uniforms__result-slide__h">Что-то пошло не так</span>
+                            <span class="uniforms__result-slide__text">Не удалось отправить заявку, свяжитесь с нами по телефону.</span>
+                        </div>
                     </div>
 
-                    <div class="uniforms__agremeent">
-	                    <input required="" name="pd" checked="checked" value="" autocomplite="off" type="checkbox" class="uniforms__agremeent__checkbox">
-	                    <p class="uniforms__agremeent__text">Я даю свое <a href="/permission_personal_data.html" target="_blank">согласие на обработку моих персональных данных</a>.</p>
-                    </div>
-                </fieldset>
-            </form>          
-        </section>
+                    <fieldset>
+                        <!-- Скрытые поля настройки формы -->
+                        <input type="hidden" name="u-name" value="test-inline-form">
+                        <input type="hidden" name="u-pid" value="1">
+                        <input type="hidden" name="u-subject" value="тема письма">
+                        <input type="hidden" name="u-description" value="описание заявки в теле письма">
+                        <input type="hidden" name="u-extdata" value="расширенные данные">
 
-        <section>
-            <h2>Кнопка вызова popup форм</h2>
-            <button class="uniforms show" data-u-name="testForm" data-u-pid="1" data-u-subject="Тема заявки с тестовой формы" data-u-description="Описание заявки с тестовой формы">Показать</button>
-        </section>
+                        <!-- Проверочное поле, оно всегда должно быть пустым. Проверяем на сервере, отдаем успешный код но ни чего не отправляем -->
+                        <div class="uniforms__field-group--hidden">
+                            <input type="text" name="name" value="">
+                        </div>
+
+                        <!-- Поле ввода обязательное -->
+                        <div class="uniforms__field-group">
+                            <label for="lbName" class="uniforms__field-group__label uniforms__field-group__label--required">Как вас зовут</label>
+                            <input type="text" id="lbName" placeholder="Ваше имя" required="required" name="fio" class="uniforms__field-group__input">
+                            <span class="uniforms__field-error-label"></span>
+                        </div>
+
+                        <!-- Поле ввода не обязательное -->
+                        <div class="uniforms__field-group">
+                            <label for="lbMessage" class="uniforms__field-group__label">Примечание</label>
+                            <input type="text" id="lbMessage" name="message" class="uniforms__field-group__input">
+                        </div>
+
+                        <!-- Радио-поле-->
+                        <div class="uniforms__field-group">
+                            <div class="uniforms__radio-group__radio-wrapper">
+                                <input id="lbType1" type="radio" value="Стандарт" class="uniforms__field-group__radio" name="type">
+                                <label for="lbType1" class="uniforms__field-group__radio-label">Стандарт</label>
+                            </div>
+                            <div class="uniforms__radio-group__radio-wrapper">
+                                <input id="lbType1" type="radio" value="Бизнес" class="uniforms__field-group__radio" name="type">
+                                <label for="lbType1" class="uniforms__field-group__radio-label">Бизнес</label>
+                            </div>
+                            <div class="uniforms__radio-group__radio-wrapper">
+                                <input id="lbType1" type="radio" value="Премиум" class="uniforms__field-group__radio" name="type">
+                                <label for="lbType1" class="uniforms__field-group__radio-label">Премиум</label>
+                            </div>
+                        </div>
+
+                        <div class="uniforms__submit-block">
+                            <button class="uniforms__button-submit">Отправить</button>
+                        </div>
+
+                        <div class="uniforms__agremeent">
+                            <input required="" name="pd" checked="checked" value="" autocomplite="off" type="checkbox" class="uniforms__agremeent__checkbox">
+                            <p class="uniforms__agremeent__text">Я даю свое <a href="/permission_personal_data.html" target="_blank">согласие на обработку моих персональных данных</a>.</p>
+                        </div>
+                    </fieldset>
+                </form>          
+            </section>
+
+            <section>
+                <h2>Кнопка вызова popup форм</h2>
+                <button class="uniforms show" data-u-name="testForm" data-u-pid="1" data-u-subject="Тема заявки с тестовой формы" data-u-description="Описание заявки с тестовой формы">Показать</button>
+            </section>
 
 
-        <section>
-            <h2>Добавление товаров в корзину !!! не исправлено !!!</h2>
-            <div class="cart-block">
-                <table>
-                    <tr>
-                        <td>Лист аллюминиевый</td>
-                        <td>
-                            <button class="uniforms-cart add" data-uniforms-cart-product-id="1" data-uniforms-cart-product-name="Лист аллюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
-                        </td>
-                        <td>
-                            <button class="uniforms-cart remove" data-uniforms-cart-product-id="1">-</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Пруток аллюминиевый</td>
-                        <td>
-                            <button class="uniforms-cart add" data-uniforms-cart-product-id="2" data-uniforms-cart-product-name="Пруток аллюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
-                        </td>
-                        <td>
-                            <button class="uniforms-cart remove" data-uniforms-cart-product-id="2">-</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Плита алюминиевая</td>
-                        <td>
-                            <button class="uniforms-cart add" data-uniforms-cart-product-id="3" data-uniforms-cart-product-name="Плита алюминиевая" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
-                        </td>
-                        <td>
-                            <button class="uniforms-cart remove" data-uniforms-cart-product-id="3">-</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Рулон алюминиевый</td>
-                        <td>
-                            <button class="uniforms-cart add" data-uniforms-cart-product-id="4" data-uniforms-cart-product-name="Рулон алюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
-                        </td>
-                        <td>
-                            <button class="uniforms-cart remove" data-uniforms-cart-product-id="4">-</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Шестигранник алюминиевый</td>
-                        <td>
-                            <button class="uniforms-cart add" data-uniforms-cart-product-id="5" data-uniforms-cart-product-name="Шестигранник алюминиевый" data-uniforms-cart-product-quantity="1" data-uniforms-cart-product-cost="2">+</button>
-                        </td>
-                        <td>
-                            <button class="uniforms-cart remove" data-uniforms-cart-product-id="5">-</button>
-                        </td>
-                    </tr>
-                </table>
-
-                <button class="uniforms cart-change" data-uniforms-cart-product-id="3" data-uniforms-cart-product-quantity="10" data-uniforms-cart-product-cost="1000">Изменить товар</button>
-                <button onclick="UniformsCart.Clean()">Очистить корзину</button>
-
-                <button onclick="console.log(UniformsCart.Get())">Показать корзину</button>
-            </div>            
-        </section>
+            <a href="page-uniforms-cart.html">Работа с Uniforms Cart</a>
+        </div>
 
     </body>
 

@@ -7,9 +7,7 @@ function UniformsCartClass() {
 
     // Содержит конфиг
     this.config = {};
-    this.body = {};
-
-    this.yandexCounter = '';
+    this.body = {};  
 
     /**
      * PRIVATE METHODS
@@ -85,118 +83,109 @@ function UniformsCartClass() {
     };
 
     // Вернет текущее состояние товара
-    this.__GetCurrState = function(jProduct) {
-        if (!jProduct.hasClass('uniforms-cart__product')) {
-            jProduct = jProduct.parents('.uniforms-cart__product');
+    this.__GetCurrState = function(jThs) {
 
-            if (jProduct.length == 0) {
-                thisClass.__Log('warn', 'Карточка товара не определена');
+        // Если у нажатого элемента присутствуют все необходимые data-атрибуты - значит нажата кнопка
+        if (
+            (jThs.data('ucart-id') != undefined) &&
+            (jThs.data('ucart-name') != undefined) && 
+            (jThs.data('ucart-quantity') != undefined)
+        ) {
+            var productID = jThs.data('ucart-id');
+            if (!NoEmpty(productID)) {
+                thisClass.__Log('warn', 'id товара-кнопки не определен');
                 return false;
             }
-        }
 
-        var out = {};
+            var productName = jThs.data('ucart-name');
+            if (!NoEmpty(productName)) {
+                thisClass.__Log('warn', 'Название товара-кнопки не определено');
+                return false;
+            }
 
-        // ID продукта
-        if (NoEmpty(jProduct.attr('data-ucart-id'))) {
-            out.id = jProduct.data('ucart-id');
-        }
+            var productQuantity = jThs.data('ucart-quantity');
+            if (!NoEmpty(productQuantity)) {
+                productQuantity = 1;
+            }
+            
+            var productCost = null;
+            if (jThs.data('ucart-cost') != undefined) {
+                productCost = parseInt(jThs.data('ucart-cost'));
+            }
+
+            var productImg = null;
+            if (jThs.data('ucart-img') != undefined) {
+                productImg = parseInt(jThs.data('ucart-img'));
+            }
+
+            var productVariation = null;
+            if (jThs.data('ucart-variation') != undefined) {
+                productVariation = jThs.data('ucart-variation');
+            }
+        } 
+
+        // Может быть нажата кнопка в плитке?
+        else if (jThs.parents('.uniforms-cart__product').length) {
+            var jTile = jThs.parents('.uniforms-cart__product');
+
+            var productID = jTile.data('ucart-id');
+            if (!NoEmpty(productID)) {
+                thisClass.__Log('warn', 'id товара-плитки не определен');
+                return false;
+            }
+
+            var productName = jTile.data('ucart-name');
+            if (!NoEmpty(productName)) {
+                thisClass.__Log('warn', 'Название товара-плитки не определено');
+                return false;
+            }
+
+            var productQuantity = 1;
+            if (jTile.find('.uniforms-cart__product__quantity').length) {
+                productQuantity = parseInt(jTile.find('.uniforms-cart__product__quantity').val());
+            } else if(jTile.data('ucart-quantity') != undefined) {
+                productQuantity = parseInt(jTile.data('ucart-quantity'));
+            }
+            
+            var productCost = null;
+            if (jThs.data('ucart-cost') != undefined) {
+                productCost = parseInt(jThs.data('ucart-cost'));
+            } else if (jTile.data('ucart-cost') != undefined) {
+                productCost = parseInt(jTile.data('ucart-cost'));
+            } 
+
+            var productImg = null;
+            if (jThs.data('ucart-img') != undefined) {
+                productImg = jThs.data('ucart-img');
+            } else if (jTile.data('ucart-img') != undefined) {
+                productCost = jTile.data('ucart-img');
+            } 
+            
+            var productVariation = null;
+            if (jThs.data('ucart-variation') != undefined) {
+                productVariation = jThs.data('ucart-variation');
+            } else if (jTile.data('ucart-variation') != undefined) {
+                productVariation = jTile.data('ucart-variation');
+            }
+        } 
+
+        // Не удалось определить товар
         else {
-            var idEl = jProduct.find('.uniforms-cart__product__id');
-            if ((idEl.prop('tagName') == 'SELECT')||(idEl.prop('tagName') == 'INPUT')||(idEl.prop('tagName') == 'TEXTAREA')) {
-                out.id = idEl.val().trim();
-            }
-            else {
-                out.id = idEl.text().trim();
-            }
+            thisClass.__Log('warn', 'Товар не определен');
+            return false;
         }
-        if (!NoEmpty(out.id) || !NoEmpty(parseInt(out.id)) ) {
-            thisClass.__Log('warn', 'ID товара не определен');
-        }
+     
+        // Подготовим данные на выход
+        var productHash = md5(productID + productName + productVariation);
 
-        // название продукта
-        if (NoEmpty(jProduct.attr('data-ucart-name'))) {
-            out.name = jProduct.data('ucart-name');
-        }
-        else {
-            var nameEl = jProduct.find('.uniforms-cart__product__name');
-            if ((nameEl.prop('tagName') == 'SELECT')||(nameEl.prop('tagName') == 'INPUT')||(nameEl.prop('tagName') == 'TEXTAREA')) {
-                out.name = nameEl.val().trim();
-            }
-            else {
-                out.name = nameEl.text().trim();
-            }
-        }
-        if (!NoEmpty(out.name)) {
-            thisClass.__Log('warn', 'название товара не определено');
-        }
-
-        // стоимость продукта
-        if (NoEmpty(jProduct.attr('data-ucart-cost'))) {
-            out.cost = jProduct.data('ucart-cost');
-        }
-        else {
-            var costEl = jProduct.find('.uniforms-cart__product__cost');
-            if ((costEl.prop('tagName') == 'SELECT')||(costEl.prop('tagName') == 'INPUT')||(costEl.prop('tagName') == 'TEXTAREA')) {
-                out.cost = costEl.val().trim();
-            }
-            else {
-                out.cost = costEl.text().trim();
-            }
-        }
-        if (!NoEmpty(out.cost) || !NoEmpty(parseInt(out.cost)) ) {
-            thisClass.__Log('warn', 'стоимость товара не определена');
-        }
-
-        // количество едениц продукта
-        if (NoEmpty(jProduct.attr('data-ucart-quantity'))) {
-            out.quantity = jProduct.data('ucart-quantity');
-        }
-        else {
-            var quantityEl = jProduct.find('.uniforms-cart__product__quantity');
-            if ((quantityEl.prop('tagName') == 'SELECT')||(quantityEl.prop('tagName') == 'INPUT')||(quantityEl.prop('tagName') == 'TEXTAREA')) {
-                out.quantity = quantityEl.val().trim();
-            }
-            else {
-                out.quantity = quantityEl.text().trim();
-            }
-        }
-
-        if (!NoEmpty(parseInt(out.quantity)) ) {
-            thisClass.__Log('warn', 'количество товара не число');
-        }
-
-        // вариация продукта
-        if (NoEmpty(jProduct.attr('data-ucart-variation'))) {
-            out.variation = jProduct.data('ucart-variation');
-        }
-        else {
-            var variationEl = jProduct.find('.uniforms-cart__product__variation');
-            if ((variationEl.prop('tagName') == 'SELECT')||(variationEl.prop('tagName') == 'INPUT')||(variationEl.prop('tagName') == 'TEXTAREA')) {
-                out.variation = variationEl.val().trim();
-            }
-            else {
-                out.variation = variationEl.text().trim();
-            }
-        }
-
-        // хэш продукта
-        if (NoEmpty(jProduct.attr('data-ucart-hash'))) {
-            out.hash = jProduct.data('ucart-hash');
-        }
-        else {
-            out.hash = jProduct.find('.uniforms-cart__product__hash').text().trim();
-        }
-
-        // Создадим хэш если не задан
-        if (!NoEmpty(out.hash)) {
-            if (NoEmpty(out.variation)) {
-                out.hash = md5(out.name + out.variation);
-            } else
-                {
-                out.hash = md5(out.name);
-            }
-        }
+        var out = {
+            id:         productID,
+            name:       productName,
+            cost:       productCost,
+            quantity:   productQuantity,
+            variation:  productVariation,
+            hash:       productHash
+        };
 
         return out;
     };
@@ -250,10 +239,10 @@ function UniformsCartClass() {
 
     // Добавляет товар в корзину
     this.Add = function(event) {
-        var jProduct = jQuery(event.target).parents('.uniforms-cart__product');
+        var jThs = jQuery(event.target);
         var cart = thisClass.__LoadCartObject();
 
-        var product = thisClass.__GetCurrState(jProduct);
+        var product = thisClass.__GetCurrState(jThs);
 
         if (NoEmpty(cart[product.hash])) {
             cart[product.hash].quantity = parseInt(cart[product.hash].quantity) + parseInt(product.quantity);
@@ -263,10 +252,10 @@ function UniformsCartClass() {
 
         thisClass.__SaveCartObject(cart);
         thisClass.__Log('log', 'Товар "' + product.name + '" добавлен в корзину');
-        jProduct.addClass('uniforms-cart__product--added');
 
         thisClass.__SendGoals('add');
-        thisClass.body.trigger('uniforms-cart-product-add', jProduct);
+        thisClass.body.trigger('uniforms-cart-product-add', cart);
+        jThs.trigger('uniforms-cart-product-add', product);
     };
 
     // Удаляет товар из корзины
@@ -312,14 +301,14 @@ function UniformsCartClass() {
 
             thisClass.body.trigger('uniforms-cart-product-change');
         }
-        // Если такого товара нет в корзине тогда его добавим
+        // Если такого товара нет в корзине, тогда его добавим
         else {
             thisClass.Add(event);
 
         }
     };
 
-    // Возвращает JSON данные о составе корзины. Если productId пустой вернет всю корзину.
+    // Возвращает JSON данные о составе корзины. Если productHash пустой вернет всю корзину.
     this.Get = function (productHash) {
         var out;
         out = thisClass.__LoadCartObject();
@@ -359,17 +348,15 @@ function UniformsCartClass() {
     this.CheckAddedProducts = function() {
         var cart = thisClass.__LoadCartObject();
 
-        jQuery('.uniforms-cart__product').each(function(i, el) {
-            var jProduct = jQuery(el);
+        jQuery('.uniforms-cart__product__add-cart').each(function(i, el) {
+            var jEl = jQuery(el);
 
-            var dataProduct = thisClass.__GetCurrState(jProduct);
-            if (typeof cart[dataProduct.hash] != 'undefined') {
-                jProduct.addClass('uniforms-cart__product--added');
+            var currProduct = thisClass.__GetCurrState(jEl);
+
+            if (cart[currProduct.hash] != undefined) {
+                jEl.trigger('uniforms-cart-product-add', cart[currProduct.hash]);
             }
-
         });
-
-        thisClass.body.trigger('uniforms-cart-checked-products');
     };
 
     // Создает заказ из переданных данных
@@ -432,8 +419,4 @@ function UniformsCartClass() {
     thisClass.__Start();
 }
 
-var UniformsCart;
-
-jQuery(document).ready(function () {
-    UniformsCart = new UniformsCartClass();
-});
+var uniformsCart = new UniformsCartClass();

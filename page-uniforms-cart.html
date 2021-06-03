@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Работа с Uniforms Cart</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton-framework/1.1.1/skeleton.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Работа с Uniforms Cart</h1>
+
+        <section>
+            <h2>Классы</h2>
+
+            <dl>
+                <dt>.uniforms-cart__product</dt>
+                <dd>класс корневого элемента товара или кнопки добавления товара в корзину</dd>
+
+                <dt>.uniforms-cart__product__quantity</dt>
+                <dd>класс счетчика количества</dd>
+
+                <dt>.uniforms-cart__product__add-cart</dt>
+                <dd>Элемент добавляющий товар в корзину</dd>
+
+                <dt>.uniforms-cart__product__remove-cart</dt>
+                <dd>класс удаления товара из корзины</dd>
+            </dl>
+        </section>
+
+        <section>
+            <h2>Товарные атрибуты</h2>
+
+            <dl>
+                <dt>data-ucart-id</dt>
+                <dd>ID товара, обязательное</dd>
+
+                <dt>data-ucart-name</dt>
+                <dd>Название товара, обязательное</dd>
+
+                <dt>data-ucart-cost</dt>
+                <dd>Стоимость товара, валидное число. Если не задано, отключается функцонал расчета стоимости, в том числе и в корзине</dd>
+
+                <dt>data-ucart-quantity</dt>
+                <dd>Количество товара, валидное число. Если не задано, по умолчанию 1</dd>
+
+                <dt>data-ucart-img</dt>
+                <dd>Изображение товара, URL картинки абсолютный</dd>
+
+                <dt>data-ucart-variation</dt>
+                <dd>Название вариации товара, например цвет или размер</dd>
+            </dl>
+        </section>
+
+        <section>
+            <div class="row">
+                <div class="twelve columns">
+                    <h2>События</h2>
+
+                    <dl>
+                        <dt>uniforms-cart-loaded</dt>
+                        <dd></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>uniforms-cart-product-add</dt>
+                        <dd></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>uniforms-cart-product-remove</dt>
+                        <dd></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>uniforms-cart-product-change</dt>
+                        <dd></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>uniforms-cart-checked-products</dt>
+                        <dd></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>uniforms-cart-order-send</dt>
+                        <dd></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>uniforms-cart-order-send-error</dt>
+                        <dd></dd>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Примеры</h2>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <h3>Оформление ввиде плитки</h3>
+
+                    
+                </div>
+                <div class="eight columns">
+                <pre>
+                    &lt;div class="uniforms-cart__product item" id="id123" data-ucart-id="id123" data-ucart-name="Название товара 1" data-ucart-quantity="1"&gt;
+                        &lt;img src="/path/to/image.jpg" alt=""&gt;
+
+                        &lt;span class="item__name"&gt;Название товара&lt;/span&gt;
+                        &lt;p class="item__text"&gt;Описание товара&lt;/p&gt;
+                        &lt;div class="row"&gt;
+                            &lt;div class="four columns"&gt;
+                                &lt;button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Цвет красный"&gt;Красный&lt;/button&gt;
+                            &lt;/div&gt;
+                            &lt;div class="four columns"&gt;
+                                &lt;button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Цвет Синий"&gt;Синий&lt;/button&gt;
+                            &lt;/div&gt;
+                            &lt;div class="four columns"&gt;
+                                &lt;button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Размер XXL"&gt;XXL&lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                </pre>
+                </div>
+                <div class="four columns">
+                    <div class="uniforms-cart__product item" id="id123" data-ucart-id="id123"  data-ucart-name="Название товара 1" data-ucart-quantity="1">
+                        <img src="/path/to/image.jpg" alt="">
+
+                        <span class="item__name">Название товара</span>
+                        <p class="item__text">Описание товара</p>
+                        <div class="row">
+                            <div class="four columns">
+                                <button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Цвет красный">Красный</button>
+                            </div>
+                            <div class="four columns">
+                                <button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Цвет Синий">Синий</button>
+                            </div>
+                            <div class="four columns">
+                                <button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Размер XXL">XXL</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <h3>Оформление ввиде кнопки</h3>
+                </div>
+                <div class="eight columns">
+                    <</p>
+                <pre>
+                    &lt;div class="uniforms-cart__product item" id="id123" data-ucart-id="id123" data-ucart-name="Название товара 1" data-ucart-quantity="1"&gt;
+                        &lt;img src="/path/to/image.jpg" alt=""&gt;
+
+                        &lt;span class="item__name"&gt;Название товара&lt;/span&gt;
+                        &lt;p class="item__text"&gt;Описание товара&lt;/p&gt;
+                        &lt;div class="row"&gt;
+                            &lt;div class="four columns"&gt;
+                                &lt;button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Цвет красный"&gt;Красный&lt;/button&gt;
+                            &lt;/div&gt;
+                            &lt;div class="four columns"&gt;
+                                &lt;button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Цвет Синий"&gt;Синий&lt;/button&gt;
+                            &lt;/div&gt;
+                            &lt;div class="four columns"&gt;
+                                &lt;button type="button" class="uniforms-cart__product__add-cart" data-ucart-variation="Размер XXL"&gt;XXL&lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                </pre>
+                </div>
+                <div class="four columns">
+                    <button class="uniforms-cart__product__add-cart" 
+                        data-ucart-id="12"
+                        data-ucart-name="Томатная паста"
+                        data-ucart-quantity="1"
+                        data-ucart-variation="Бочка 120 кг"
+                        >Добавить Томатную пасту</button>
+
+                    <a class="uniforms-cart__product__add-cart" 
+                        data-ucart-id="12"
+                        data-ucart-name="Томатная паста"
+                        data-ucart-quantity="1"
+                        data-ucart-variation="Бочка 120 кг"
+                        >Добавить Томатную пасту</a>
+                </div>
+            </div>
+        </section>
+    </div>    
+</body>
+</html>

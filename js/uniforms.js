@@ -173,7 +173,7 @@ function UniformsClass() {
             uniformsThis.__Log('log', 'Языковой пакет загружен');
             uniformsThis.body.trigger('uniforms-lang-loaded');
         } else {
-            jQuery.getJSON(uniformsThis.config.langsUrl + 'uniforms-lang-' + uniformsThis.userData.langUser + '.json', function(data) {
+            jQuery.getJSON(uniformsThis.config.langsUrl + 'uniforms-lang-default.json', function(data) {
                 // todo проверить пришли ли данные
                 uniformsThis.lang = data;
 

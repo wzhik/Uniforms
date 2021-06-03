@@ -1,4 +1,6 @@
 .htaccess
+.gitignore
+
 /uniforms/classes/PHPMailerAutoload.php
 /uniforms/classes/class.phpmaileroauth.php
 /uniforms/classes/class.pop3.php
@@ -6,6 +8,6 @@
 /uniforms/classes/class.phpmailer.php
 /uniforms/classes/class.phpmaileroauthgoogle.php
 /#doc/
-/.idea/
+/.vscode/
 /js/vendor/
 /css/vendor/

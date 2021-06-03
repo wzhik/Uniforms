@@ -1,52 +1,44 @@
-.mixAfterClear {
-    display: block;
-    contain: '';
-    clear: both;
-}
+@import "base";
 
 .uniforms {
     // Font base size
-    @fntSizeBase: 10px;
+    $fntSizeBase: 10px;
 
 	// form config
-    @clrText: white;
-    @clrBorder: #ffbc41;
-    @borderWidth: 10px;
-    @clrBackground: #ffbc41;
+    $clrText: white;
+    $clrBorder: #ffbc41;
+    $borderWidth: 10px;
+    $clrBackground: #ffbc41;
 
-    
     // closer
-    @clrCloserNormal: #ff9d00;
-    @clrCloserActive: white;
+    $clrCloserNormal: #ff9d00;
+    $clrCloserActive: white;
 
     // fields config
-    @clrInputBorderNormal: transparent;
-    @clrInputBorderActive: #ff9d00;
-    @clrInputText: black;
-    @clrInputDescriptionText: #226b63;
-    @heightFieldInput: 40px;
-
+    $clrInputBorderNormal: transparent;
+    $clrInputBorderActive: #ff9d00;
+    $clrInputText: black;
+    $clrInputDescriptionText: #226b63;
+    $heightFieldInput: 40px;
 
 	// submit button
-    @clrSubmitBackgroundNormal: #389f94;
-    @clrSubmitBackgroundActive:#226b63;
+    $clrSubmitBackgroundNormal: #389f94;
+    $clrSubmitBackgroundActive:#226b63;
 
 	// result fog
-    @clrResultFogInfo: blue;
-    @clrResultFogSuccess: green;
-    @clrResultFogError: red;
+    $clrResultFogInfo: rgba(0, 0, 255, 0.7);
+    $clrResultFogSuccess: rgba(30, 133, 28, 0.7);
+    $clrResultFogError: rgba(255, 0, 0, 0.7);
 
 
-    .mixFnt {
-        font-family: 'Exo 2', sans-serif;
+    @mixin mixFnt {
         font-weight: 400;
     }
-    .mixFntBold {
-        font-family: 'Exo 2', sans-serif;
+    @mixin mixFntBold {
         font-weight: 700;
     }
 
-    .mixFnt;
+    @include mixFnt;
 
     fieldset {
         margin: 0;
@@ -54,10 +46,9 @@
         border: none;
     }
 
-
     &__h {
-        font-size:  3 * @fntSizeBase;
-        color:  @clrText;
+        font-size:  3 * $fntSizeBase;
+        color:  $clrText;
         display: block;
         text-align: left;
         margin: 0 0 20px 0;
@@ -66,13 +57,13 @@
     }
 
     &__description {
-        color: @clrText;
-        font-size: 1.6 * @fntSizeBase;
+        color: $clrText;
+        font-size: 1.6 * $fntSizeBase;
         display: block;
         text-align: left;
         margin: 0 0 30px 0;
     }
-    
+
     &__result-slide {
         position: absolute;
         top: 0;
@@ -85,7 +76,7 @@
         .uniforms__result-slide__h {
             display: block;
             text-align: center;
-            font-size: 3 * @fntSizeBase;
+            font-size: 3 * $fntSizeBase;
             color: white;
             margin: 0 0 20px;
         }
@@ -93,72 +84,74 @@
         &__text {
 
             display: block;
-            font-size: 2 * @fntSizeBase;
+            font-size: 2 * $fntSizeBase;
             text-align: center;
             color: white;
             line-height: 1.4;
         }
 
-        &--success {}
+        // &--success {}
 
-        &--error { }
+        // &--error {}
     }
 
     &__field-group {
         margin: 0 0 20px 0;
-    
+
         &__label {
-            .mixFntBold;
+            @include mixFntBold;
 
             margin-bottom: 5px;
-            font-size: 1.6 * @fntSizeBase;
+            font-size: 1.6 * $fntSizeBase;
             display: block;
-            color: @clrText;
+            color: $clrText;
         }
 
         &__input {
             padding: 0 15px;
             width: 100%;
-            font-size: 1.6 * @fntSizeBase;
-            border: 2px solid @clrInputBorderNormal;
-            height: @heightFieldInput;
-            line-height: @heightFieldInput;
+            font-size: 1.6 * $fntSizeBase;
+            border: 2px solid $clrInputBorderNormal;
+            height: $heightFieldInput;
+            line-height: $heightFieldInput;
             text-align: left;
             transition: linear all 0.3s;
-            color: @clrInputText;
+            color: $clrInputText;
             box-sizing: border-box;
 
             &:hover, &:focus {
-                border-color: @clrInputBorderActive;
+                border-color: $clrInputBorderActive;
             }
         }
 
         &__textarea {
             padding: 3px 15px;
             width: 100%;
-            font-size: 1.6 * @fntSizeBase;
-            border: 2px solid @clrInputBorderNormal;
+            font-size: 1.6 * $fntSizeBase;
+            border: 2px solid $clrInputBorderNormal;
             line-height: 1.4;
             text-align: left;
             resize: vertical;
-            
+            box-sizing: border-box;
+            width: 100%;
+
             &:hover, &:focus {
-                border-color: @clrInputBorderActive;
+                border-color: $clrInputBorderActive;
             }
-        }    
-    
+        }
+
         &__radio-wrapper {
             margin: 0 0 20px 0;
         }
-        &__radio-h {    
-            font-size: 2 * @fntSizeBase;
+        &__radio-h {
+            font-size: 2 * $fntSizeBase;
             line-height: 1.4;
             margin-bottom: 15px;
             display: block;
         }
         &__radio-label {
             line-height: 20px;
-            font-size: 1.6 * @fntSizeBase;
+            font-size: 1.6 * $fntSizeBase;
             vertical-align: top;
             margin: 0;
             height: 20px;
@@ -172,33 +165,12 @@
         &__description {
             display: block;
             font-size: 12px;
-            color: @clrInputText;
+            color: $clrInputText;
         }
     }
 
     &__submit-block {
         text-align: center;
-    }
-
-    &__button-submit {
-        .mixFntBold;
-
-        font-size: 1.6 * @fntSizeBase;
-        text-transform: uppercase;
-        display: inline-block;
-        border: none;
-        background: @clrSubmitBackgroundNormal;
-        height: @heightFieldInput;
-        line-height: @heightFieldInput;
-        text-align: center;
-        color: @clrText;
-        padding: 0 20px;
-        transition: linear all 0.3s;
-        cursor: pointer;
-
-        &:hover {
-            background: @clrSubmitBackgroundActive;
-        }
     }
 
     &__fog {
@@ -212,19 +184,19 @@
         left: 0;
 
         &--info {
-            background-color: @clrResultFogInfo;
+            background-color: $clrResultFogInfo;
         }
         &--success {
-            background-color: @clrResultFogSuccess;
+            background-color: $clrResultFogSuccess;
         }
         &--error {
-            background-color: @clrResultFogError;
+            background-color: $clrResultFogError;
         }
 
         &__label {
             max-width: 80%;
             display: block;
-            font-size: 3 * @fntSizeBase;
+            font-size: 3 * $fntSizeBase;
             color: white;
             font-weight: 600;
             text-align: center;
@@ -236,7 +208,8 @@
     &__agremeent {
         display: flex;
         align-items: center;
-        
+        margin-top: 16px;
+
         &__checkbox {
             display: block;
             margin: 0 10px 0 0;
@@ -244,10 +217,21 @@
         }
         &__text {
             display: block;
-            font-size: 1.2 * @fntSizeBase;
+            font-size: 1 * $fntSizeBase;
             word-wrap: break-word;
             hyphens: auto;
             margin: 0;
+            color: $clrText;
+
+            a {
+                color: $clrText;
+                text-decoration: underline;
+
+                &:hover {
+                    color: $clrText;
+                    text-decoration: underline;
+                }
+            }
         }
     }
 
@@ -266,7 +250,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    
+
         &__body-fog {
             position: fixed;
             top: 0;
@@ -277,10 +261,10 @@
             background: black;
             opacity: 0.7;
         }
-    
+
         &__closer {
             position: absolute;
-            color: @clrCloserNormal;
+            color: $clrCloserNormal;
             font-size: 30px;
             font-weight: 700;
             right: 0;
@@ -290,17 +274,17 @@
             transition: linear all 0.3s;
 
             &:hover {
-                color: @clrCloserActive;
+                color: $clrCloserActive;
             }
         }
         &__wrapper-form {
-            background: @clrBackground;
+            background: $clrBackground;
             position: relative;
             z-index: 35200;
             width: 100%;
             max-width: 400px;
             padding: 30px;
-            border: @borderWidth solid @clrBorder;
+            border: $borderWidth solid $clrBorder;
         }
     }
 }

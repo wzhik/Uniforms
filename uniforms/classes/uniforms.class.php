@@ -420,7 +420,7 @@ class UniformsClass {
     private function FinalyConfig() {
         // Заказ из корзины
         if ($this->request['u-at'] == 'sendorder') {
-            $this->finalyConfig['form']['subject'] = $this->config['profiles']['cart']['mailSubject'];
+            $this->finalyConfig['form']['subject'] = "[{$this->config['domain']}] " . $this->config['profiles']['cart']['mailSubject'];
             $this->finalyConfig['form']['recipients'] = $this->config['profiles']['cart']['recipients'];
         }
 
