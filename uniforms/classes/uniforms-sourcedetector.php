@@ -90,7 +90,7 @@ class UniSourceDetector {
     //
     // Получает исходные данные
     private function GetSourceData() {
-        $this->rawRef = $_SERVER['HTTP_REFERER'];
+        $this->rawRef = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
         $this->rawQuery = $_SERVER['QUERY_STRING'];
         if ($_SERVER['HTTPS']) {
             $this->rawURL = "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
@@ -108,15 +108,15 @@ class UniSourceDetector {
 
         // Разбираем реферальную строку
         $tmp = parse_url($this->rawRef);
-        $this->arrRef['host'] = $tmp['host'];
-        $this->arrRef['path'] = $tmp['path'];
-        $this->arrRef['query'] = $this->StringQueryToArray($tmp['query']);
+        $this->arrRef['host'] = isset($tmp['host']) ? $tmp['host'] : '';
+        $this->arrRef['path'] = isset($tmp['path']) ? $tmp['path'] : '';
+        $this->arrRef['query'] = isset($tmp['query']) ? $this->StringQueryToArray($tmp['query']) : array();
 
         // Разбираем строку запроса
         $tmp = parse_url($this->rawURL);
         $this->arrQuery['host'] = $tmp['host'];
         $this->arrQuery['path'] = $tmp['path'];
-        $this->arrQuery['query'] = $this->StringQueryToArray($tmp['query']);
+        $this->arrQuery['query'] = isset($tmp['query']) ? $this->StringQueryToArray($tmp['query']) : array();
 
         // Получим UTM
         $this->GetUTM();
