@@ -227,14 +227,43 @@ function UniformsClass() {
         var out = [];
 
         if (actionType === 'send') {
-            out = uniformsThis.form.root.serializeArray();
 
-            out.push({name: 'u-title', value: uniformsThis.page.pageTitle});
-            out.push({name: 'u-url', value: uniformsThis.page.pageUrl});
-            out.push({name: 'u-city', value: uniformsThis.userData.city});
-            out.push({name: 'u-region', value: uniformsThis.userData.region});
-            out.push({name: 'u-country', value: uniformsThis.userData.country});
-            out.push({name: 'u-at', value: actionType});
+            var out = new FormData();
+            
+            if (uniformsThis.form.root.find('input[type=file]').length) {
+                jQuery.each(uniformsThis.form.root.find('input[type=file]')[0].files, function(i, file) {
+                    out.append('file', file);
+                });
+            }
+
+            uniformsThis.form.root.find('input,textarea').each(function(i, el) {
+                let jEl = jQuery(el);
+
+                //= Если имя поля не пустое
+                if (jEl.prop('name')) {
+
+                    //== Если input checkbox
+                    if ((jEl.prop('tagName') == 'input') && (jEl.prop('type') == 'checkbox')) {
+                        if (jEl.is('checked')) {
+                            out.append(jEl.prop('name'), 1);
+                        } 
+                        else {
+                            out.append(jEl.prop('name'), 0);
+                        }
+                    } 
+
+                    else {
+                        out.append(jEl.prop('name'), jEl.val());
+                    }
+                }
+            })
+
+            out.append('u-title', uniformsThis.page.pageTitle);
+            out.append('u-url', uniformsThis.page.pageUrl);
+            out.append('u-city', uniformsThis.userData.city);
+            out.append('u-region', uniformsThis.userData.region);
+            out.append('u-country', uniformsThis.userData.country);
+            out.append('u-at', actionType);
         }
 
         if (actionType === 'show') {
