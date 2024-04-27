@@ -240,20 +240,20 @@ function UniformsClass() {
                 let jEl = jQuery(el);
 
                 //= Если имя поля не пустое
-                if (jEl.prop('name')) {
+                if (jEl.attr('name')) {
 
                     //== Если input checkbox
-                    if ((jEl.prop('tagName') == 'input') && (jEl.prop('type') == 'checkbox')) {
+                    if ((jEl.prop('tagName') == 'INPUT') && (jEl.attr('type') == 'checkbox')) {
                         if (jEl.is('checked')) {
-                            out.append(jEl.prop('name'), 1);
+                            out.append(jEl.attr('name'), 1);
                         } 
                         else {
-                            out.append(jEl.prop('name'), 0);
+                            out.append(jEl.attr('name'), 0);
                         }
                     } 
 
                     else {
-                        out.append(jEl.prop('name'), jEl.val());
+                        out.append(jEl.attr('name'), jEl.val());
                     }
                 }
             })
