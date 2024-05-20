@@ -29,6 +29,7 @@ function UniformsClass() {
     // Объект формы
     this.form = {};
     this.form.data = {};
+    this.form.config = {};
 
     // Этот объект храним в localStorage, периодически обновляем
     this.userData = {};
@@ -289,10 +290,16 @@ function UniformsClass() {
             uniformsThis.form.root = target;
             uniformsThis.form.typeObject = 'button';
 
+            // Данные формы
             uniformsThis.form.data['u-name'] = target.data('u-name');
             uniformsThis.form.data['u-subject'] = target.data('u-subject');
             uniformsThis.form.data['u-description'] = target.data('u-description');
             uniformsThis.form.data['u-pid'] = target.data('u-pid');
+
+            // Настройки формы
+            if (target.data('u-fog-text-success') != undefined) { uniformsThis.form.config['fog-text-success'] = target.data('u-fog-text-success') }
+            if (target.data('u-fog-text-error') != undefined) { uniformsThis.form.config['fog-text-error'] = target.data('u-fog-text-error') }
+            if (target.data('u-fog-text-info') != undefined) {uniformsThis.form.config['fog-text-info'] = target.data('u-fog-text-info')}
 
             uniformsThis.__ShowForm();
         }
@@ -314,6 +321,11 @@ function UniformsClass() {
             uniformsThis.form.container = target.parents('.uniforms--popup');
             uniformsThis.form.typeObject = 'form-popup';
             uniformsThis.form.data['u-name'] = uniformsThis.form.root.find('[name=u-name]').val();
+
+            // Настройки формы
+            if (uniformsThis.form.root.data('u-fog-text-success') != undefined) {uniformsThis.form.config['fog-text-success'] = uniformsThis.form.root.data('u-fog-text-success')}
+            if (uniformsThis.form.root.data('u-fog-text-error') != undefined) {uniformsThis.form.config['fog-text-error'] = uniformsThis.form.root.data('u-fog-text-error')}
+            if (uniformsThis.form.root.data('u-fog-text-info') != undefined) {uniformsThis.form.config['fog-text-info'] = uniformsThis.form.root.data('u-fog-text-info')}
 
             uniformsThis.__SubmitForm();
         }
@@ -529,15 +541,27 @@ function UniformsClass() {
         switch (typeFog) {
             case 'info':
                 fogClass = 'uniforms__fog--info';
-                fogLabel = uniformsThis.lang.fogLabelInfo;
+                if (uniformsThis.form.config['fog-text-info'] != undefined) {
+                    fogLabel = uniformsThis.form.config['fog-text-info']
+                } else {
+                    fogLabel = uniformsThis.lang.fogLabelInfo
+                }
                 break;
             case 'error':
                 fogClass = 'uniforms__fog--error';
-                fogLabel = uniformsThis.lang.fogLabelError;
+                if (uniformsThis.form.config['fog-text-error'] != undefined) {
+                    fogLabel = uniformsThis.form.config['fog-text-error']
+                } else {
+                    fogLabel = uniformsThis.lang.fogLabelError
+                }
                 break;
             case 'success':
                 fogClass = 'uniforms__fog--success';
-                fogLabel = uniformsThis.lang.fogLabelSuccess;
+                if (uniformsThis.form.config['fog-text-success'] != undefined) {
+                    fogLabel = uniformsThis.form.config['fog-text-success']
+                } else {
+                    fogLabel = uniformsThis.lang.fogLabelSuccess
+                }
                 break;
         }
 

@@ -48,11 +48,16 @@ $usd = new UniSourceDetector();
 
 
 
-
 ### Инлайн-формы
 тег *form* должен иметь класс **unifroms-inline**
 
+#### Настройки формы
+Для инлайн-форм настройки формы задаются в data-атрибутах тега form. 
 
+##### Настройки тумана 
+- data-u-fog-text-success - Текст для тумана успешно отправленной формы. Так как текст в тумане показывается в теге span, то в настройке допустим html допустимый в span
+- data-u-fog-text-info - Текст для тумана информации. Допустим html описанный выше
+- data-u-fog-text-error - Текст для тумана ошибки. Допустим html описанный выше
 
 
 ### Поля форм
@@ -99,8 +104,21 @@ data-поля:
 * data-u-subject - тема письма для оператора
 * data-u-description - текст описания для письма оператора
 
-<a href="javascript:void(0)" class="uniforms show header__order-call" data-u-name="orderCall" data-u-pid="2" data-u-subject="Заказ обратного звонка">Заказать обратный звонок</a>
+настройки формы:
+- data-u-fog-text-success - Текст для тумана успешно отправленной формы. Так как текст в тумане показывается в теге span, то в настройке допустим html допустимый в span
+- data-u-fog-text-info - Текст для тумана информации. Допустим html описанный выше
+- data-u-fog-text-error - Текст для тумана ошибки. Допустим html описанный выше
 
+<a 
+    href="javascript:void(0)" 
+    class="uniforms show header__order-call" 
+    data-u-name="orderCall" 
+    data-u-pid="2" 
+    data-u-subject="Заказ обратного звонка"
+    data-u-fog-text-success="Произвольный текст для success-тумана"
+    data-u-fog-text-error="Произвольный текст для тумана ошибки"
+    data-u-fog-text-info="Произвольный текст для информационного тумана"
+    >Заказать обратный звонок</a>
 
 
 
