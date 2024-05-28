@@ -353,8 +353,8 @@ function UniformsClass() {
         }
 
         if (typeof ym == 'function') {
-
-            ym(/* номер_счетчика */, 'reachGoal', uniformsThis.form.data['u-name'] + yaLabelPrefix);
+            // TODO поставить реальный id счетчика
+            // ym(11111111, 'reachGoal', uniformsThis.form.data['u-name'] + yaLabelPrefix);
 
             this.__Log('warn', 'Событие ' + uniformsThis.form.data['u-name'] + yaLabelPrefix + ' отправлено в Яндекс.Метрику');
         } else {
@@ -362,8 +362,8 @@ function UniformsClass() {
         }
 
         // найдем счетчик аналитики
-        if (typeof ga == 'function' ) {
-            ga('send', 'event', 'form', gaEvent, uniformsThis.form.data['u-name'], 1);
+        if (typeof dataLayer == 'object' ) {
+            dataLayer.push({ 'event': uniformsThis.form.data['u-name'] + '_' + gaEvent });
         }
         else {
             this.__Log('warn', 'Код Google Analytics не найден');
