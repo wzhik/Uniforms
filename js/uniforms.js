@@ -340,15 +340,15 @@ function UniformsClass() {
         switch (insideEvent) {
             case 'open':        // открытие формы
                 yaLabelPrefix = '_open';
-                gaEvent = 'open';
+                gaEvent = 'openForm';
                 break;
             case 'submit':      // отправка формы
                 yaLabelPrefix = '_submit';
-                gaEvent = 'submit';
+                gaEvent = 'submitForm';
                 break;
             case 'close':       // закрытие формы
                 yaLabelPrefix = '_close';
-                gaEvent = 'close';
+                gaEvent = 'closeForm';
                 break;
         }
 
@@ -363,10 +363,10 @@ function UniformsClass() {
 
         // найдем счетчик аналитики
         if (typeof dataLayer == 'object' ) {
-            dataLayer.push({ 'event': uniformsThis.form.data['u-name'] + '_' + gaEvent });
-        }
-        else {
-            this.__Log('warn', 'Код Google Analytics не найден');
+            dataLayer.push({ 
+                'event': gaEvent ,
+                'formName': uniformsThis.form.data['u-name']
+            });
         }
     };
 
