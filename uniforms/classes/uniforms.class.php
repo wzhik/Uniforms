@@ -148,8 +148,6 @@ class UniformsClass {
 
         $this->ServerSend();
 
-        $this->GetFiles();
-
         $this->MailSend();
     }
 
