@@ -14,8 +14,12 @@ $uniforms = new UniformsClass(array(
         'mailDescription'   => 'Дефолтное описание',
     ),
     'sender' => array(
-        'type'          => 'hosting', // hosting | phpmailer | none - способ отправки писем,  средствами хостинга, через phpmailer, не отправлять
-        // настройки при отправке через phpmailer        
+        'type'          => 'hosting',   // Тип отправки писем
+                                        // none         - не отправлять письмо
+                                        // hosting      - отправит средствами хостинга
+                                        // phpmailer    - отправить средствами PHPMMailer
+
+        // настройки при отправке через phpmailer
         //'smtp'          => 'smtp.yandex.ru',
         //'login'         => 'webmaster-usoft@yandex.ru',
         //'pass'          => 'rnvvwxuxrpxvzpmg',
