@@ -148,6 +148,8 @@ class UniformsClass {
 
         $this->ServerSend();
 
+        $this->GetFiles();
+
         $this->MailSend();
     }
 
@@ -320,10 +322,18 @@ class UniformsClass {
                 $mailer->addAddress($item);     // Add a recipient
             }
 
+            //= Если есть загруженные файлы
+            foreach ($_FILES as $nameField => $arField) {
+                foreach ($arField['name'] as $i => $fileName) {
+                    $mailer->addAttachment($arField['tmp_name'][$i], $fileName);
+                }
+            }
+
             // Если пользователь заполнил имя и почту то, добавим путь для ответа, чтобы можно было ответить напрямую пользователю
             if (!empty($this->request['name']) && (!empty($this->request['email']))) {
                 $mailer->addReplyTo($this->request['email'], $this->request['name']);
             }
+
             $mailer->isHTML(true);
 
             $mailer->Subject = $this->finalyConfig['form']['subject'];
