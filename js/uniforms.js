@@ -432,11 +432,12 @@ function UniformsClass() {
         uniformsThis.__FormFog('info');
 
         jQuery.ajax({
-            "url": uniformsThis.config.processorUrl,
-            "type": "POST",
-            "data": uniformsThis.__PrepareSubmitData('send'),
-            "dataType": "json",
-            "success": function (data) {
+            url: uniformsThis.config.processorUrl,
+            type: "POST",
+            data: uniformsThis.__PrepareSubmitData('send'),
+            dataType: "json",
+            processData: false,
+            success: function (data) {
                 if (data.status == 1) {
                     uniformsThis.__FormFog('success');
                     uniformsThis.__ExecuterFunctions('afterSubmit');
