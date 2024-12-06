@@ -230,18 +230,12 @@ function UniformsClass() {
         if (actionType === 'send') {
 
             var out = new FormData();
-            
-            if (uniformsThis.form.root.find('input[type=file]').length) {
-                jQuery.each(uniformsThis.form.root.find('input[type=file]')[0].files, function(i, file) {
-                    out.append('file', file);
-                });
-            }
 
             uniformsThis.form.root.find('input,textarea').each(function(i, el) {
                 let jEl = jQuery(el);
 
                 //= Если имя поля не пустое
-                if (jEl.attr('name')) {
+                if (jEl.attr('name').length) {
 
                     //== Если input checkbox
                     if ((jEl.prop('tagName') == 'INPUT') && (jEl.attr('type') == 'checkbox')) {
@@ -251,9 +245,12 @@ function UniformsClass() {
                         else {
                             out.append(jEl.attr('name'), 0);
                         }
-                    } 
-
-                    else {
+                    } else if ((jEl.prop('tagName') == 'INPUT') && (jEl.attr('type') == 'file')) {
+                        let fieldName = jEl.attr('name') + '[]';
+                        for (let key in Object.keys(jEl[0].files) ) {
+                            out.append(fieldName, jEl[0].files[key]);
+                        }
+                    } else {
                         out.append(jEl.attr('name'), jEl.val());
                     }
                 }
@@ -437,6 +434,7 @@ function UniformsClass() {
             data: uniformsThis.__PrepareSubmitData('send'),
             dataType: "json",
             processData: false,
+            contentType: false,
             success: function (data) {
                 if (data.status == 1) {
                     uniformsThis.__FormFog('success');
