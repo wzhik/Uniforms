@@ -1,5 +1,5 @@
 /**
- * Класс Uniforms v2.210603
+ * Класс Uniforms v2.250729
  * 
  */
 
@@ -9,6 +9,14 @@ function NoEmpty(string) {
         out = false;
     }
     return out;
+}
+
+function DataAttrTransform(str) {
+  if (str.length >= 2 && str[0] === 'u' && str[1] === str[1].toUpperCase()) {
+    // Заменяем 'u' на 'u-', а следующую заглавную букву делаем строчной
+    return 'u-' + str[1].toLowerCase() + str.slice(2);
+  }
+  return str;
 }
 
 // Класс обрабатывающий функционал форм
@@ -265,10 +273,12 @@ function UniformsClass() {
         }
 
         if (actionType === 'show') {
-            out.push({name: 'u-name', value: uniformsThis.form.data['u-name']});
-            out.push({name: 'u-subject', value: uniformsThis.form.data['u-subject']});
-            out.push({name: 'u-description', value: uniformsThis.form.data['u-description']});
-            out.push({name: 'u-pid', value: uniformsThis.form.data['u-pid']});
+            for (i in uniformsThis.form.data) {
+                out.push({
+                    name: i,
+                    value: uniformsThis.form.data[i]
+                })
+            }
             out.push({name: 'u-at', value: actionType});
         }
 
@@ -288,10 +298,10 @@ function UniformsClass() {
             uniformsThis.form.typeObject = 'button';
 
             // Данные формы
-            uniformsThis.form.data['u-name'] = target.data('u-name');
-            uniformsThis.form.data['u-subject'] = target.data('u-subject');
-            uniformsThis.form.data['u-description'] = target.data('u-description');
-            uniformsThis.form.data['u-pid'] = target.data('u-pid');
+            let objData = target.data();
+            for (i in objData) {
+                uniformsThis.form.data[DataAttrTransform(i)] = objData[i];
+            }
 
             // Настройки формы
             if (target.data('u-fog-text-success') != undefined) { uniformsThis.form.config['fog-text-success'] = target.data('u-fog-text-success') }
