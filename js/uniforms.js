@@ -1,5 +1,5 @@
 /**
- * Класс Uniforms v2.250729
+ * Класс Uniforms v251109
  * 
  */
 
@@ -29,7 +29,7 @@ function UniformsClass() {
     this.config = {
         debugMode: false,
         cartMode: false
-    };
+    }; 
 
     // Объект с данными о текущей странице
     this.page = {};
@@ -198,7 +198,7 @@ function UniformsClass() {
     // Выполняет событийные функции при наступлении события typeEvent
     // typeEvent - open | beforeSubmit | afterSubmit
     this.__ExecuterFunctions = function (typeEvent) {
-        if (typeof uniformsEventFunctions != 'object') { return; }
+        if (typeof document.uniformsEventFunctions != 'object') { return; }
 
         var formName = uniformsThis.form.data['u-name'];
         var func;
@@ -206,19 +206,19 @@ function UniformsClass() {
 
         switch (typeEvent) {
             case 'open':
-                func = uniformsEventFunctions[formName + '_open'];
+                func = document.uniformsEventFunctions[formName + '_open'];
                 logMessage = uniformsThis.lang.logMessageOpenForm + formName;
                 break;
             case 'beforeSubmit':
-                func = uniformsEventFunctions[formName + '_beforeSubmit'];
+                func = document.uniformsEventFunctions[formName + '_beforeSubmit'];
                 logMessage = uniformsThis.lang.logMessageBeforeSend + formName;
                 break;
             case 'afterSubmit':
-                func = uniformsEventFunctions[formName + '_afterSubmit'];
+                func = document.uniformsEventFunctions[formName + '_afterSubmit'];
                 logMessage = uniformsThis.lang.logMessageAfterSend + formName;
                 break;
             case 'errorSubmit':
-                func = uniformsEventFunctions[formName + '_errorSubmit'];
+                func = document.uniformsEventFunctions[formName + '_errorSubmit'];
                 logMessage = uniformsThis.lang.logMessageAfterSend + formName;
                 break;
         }

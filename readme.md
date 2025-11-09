@@ -123,9 +123,10 @@ data-поля:
 
 
 ### Событийные функции
-В файле *uniforms-event-functions.js* пишем функции которые должны выполниться при наступлении события
+Это функции которые выполняются на определенных этапах жизни форм. По сути это хуки (hook) для выполнения произвольного кода в нужном месте. В событийные функции передается единсвенный параметр в котором храниться jQuery объект корневого элемента формы.  
+Событийные функции описываются как глобальный объект в объекте document.  
 ```javascript
-    var uniformsEventFunctions = {
+    document.uniformsEventFunctions = {
         "nameForm_open": function (jForm) {
 
         },
@@ -134,12 +135,37 @@ data-поля:
         },
         "nameForm_afterSubmit": function (jForm) {
 
-        },
-        "beautyEnroll_beforeSubmit": function(jForm) {
-            console.log('beautyEnroll_beforeSubmit');
-            console.log(jForm);
         }
     };
+```
+
+Ранее событийные функции описывались в отдельном файле js/uniforms-event-functions.js в глобальной переменной uniformsEventFunctions.  
+Теперь событийные функции можно описывать как в отдельном файле так и в любом другом месте.  
+Событий при которых вызываются сторонние функции всего 3:
+- Открытие формы, постфикс _open
+- Перед отправкой формы, постфикс _beforeSubmit
+- После успешной отправки формы, постфикс _afterSubmit
+- Ошибка при отправке формы, постфикс _errorSubmit
+
+Синтаксис такой:
+```javascript
+// Если объект событийных функций не существует - создадим пустой
+document.uniformsEventFunctions = document.uniformsEventFunctions || {};
+
+// Добавим функцию которая выполнится при *открытии* формы с идентификатором *getPrice*
+document.uniformsEventFunctions['getPrice_open'] = function(jEl) {
+    // код функции
+}
+
+// Добавим функцию которая выполнится  *после отправки* формы с идентификатором *getPrice*
+document.uniformsEventFunctions['getPrice_beforeSubmit'] = function(jEl) {
+    // код функции
+}
+
+// Добавим функцию которая выполнится  *при возникновении ошибки* при отправке формы с идентификатором *getPrice*
+document.uniformsEventFunctions['getPrice_errorSubmit'] = function(jEl) {
+    // код функции
+}
 ```
 
 
