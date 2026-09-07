@@ -1,0 +1,212 @@
+:root {
+    --uniforms-text-size: 14px;
+    --uniforms-text-family: "Roboto", sans-serif;
+
+	--uniforms-popup-text-clr: white;
+
+	--uniforms-popup-border-clr: #ffbc41; 
+	--uniforms-popup-border-width: 10px; 
+	--uniforms-popup-background-clr: #ffbc41; 
+
+	--uniforms-popup-closer-normal-clr: #ff9d00;
+	--uniforms-popup-closer-active-clr: white;
+
+	--uniforms-field-border-normal-clr: transparent;
+	--uniforms-field-border-active-clr: #ff9d00;
+	--uniforms-field-text-clr: black;
+	--uniforms-field-label-clr: #226b63;
+	--uniforms-field-height: 40px;
+
+	--uniforms-submit-normal-clr: #389f94;
+	--uniforms-submit-active-clr: #226b63;
+
+	--uniforms-fog-info-bg-clr: rgba(0, 0, 255, 0.7);
+	--uniforms-fog-success-bg-clr: rgba(30, 133, 28, 0.7);
+	--uniforms-fog-error-bg-clr: rgba(255, 0, 0, 0.7);
+
+    --zindex-bg: 990;
+    --zindex-content-1: 1000;
+    --zindex-content-2: 1010;
+    --zindex-content-3: 1020;
+    --zindex-popup: 1030;
+    --zindex-top: 1040;
+}
+
+
+/* Общие стили */
+.uniforms {
+    position: relative;
+    font-family: var(--uniforms-text-family);
+    font-size: var(--uniforms-text-size);
+
+    .uniforms__field {
+
+        & input {
+
+        }
+
+        & select {
+
+        }
+
+        & textarea {
+
+        }
+
+        & label {
+
+        }
+
+    }
+
+    .uniforms__fog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+
+        &.uniform__fog--error {
+            background-color: var(--uniforms-fog-error-bg-clr);
+        }
+
+        &.uniform__fog--info {
+            background-color: var(--uniforms-fog-info-bg-clr);
+        }
+
+        &.uniform__fog--success {
+            background-color: var(--uniforms-fog-success-bg-clr);
+        }
+
+        .uniforms__fog__label {
+            max-width: 80%;
+            display: block;
+            font-size: 30px;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            opacity: 1;
+        }
+    }
+
+    .uniforms__agreement {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+
+        & input[type=checkbox] {
+
+        }
+
+        & p {
+            display: block;
+            font-size: 10px;
+            word-wrap: break-word;
+            hyphens: auto;
+            margin: 0;
+            hyphens: auto;
+
+            & a {                
+	            text-decoration: underline;
+                
+                &:hover {
+                    color: white;
+	                text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+/* Стили для popup форм  */
+.uniforms--popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: var(--zindex-popup);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+    .uniforms--popup__body-fog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: var(--zindex-popup);
+        background: black;
+        opacity: 0.7;
+    }
+
+    .uniforms--popup__wrapper-form {
+        background: var(--uniforms-popup-background-clr);
+        position: relative;
+        z-index: var(--zindex-popup);
+        width: 100%;
+        max-width: 400px;
+        padding: 30px;
+        border: 10px solid var(--uniforms-popup-border-clr);
+    }
+
+    .uniforms--popup__closer {
+        position: absolute;
+        color: var(--uniforms-popup-closer-normal-clr);
+        font-size: 30px;
+        font-weight: 700;
+        right: 0;
+        top: 0px;
+        font-family: sans-serif;
+        cursor: pointer;
+        transition: linear all 0.3s;
+        
+        &:hover {
+            color: var(--uniforms-popup-closer-active-clr);
+        }
+    }    
+
+    .uniform__h {
+
+    }
+
+    .uniforms__description {
+
+    }
+
+    & fieldset {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+}
+
+
+/* Стили для inline форм */
+.uniforms--inline {
+
+}
+
+
+@media screen and (min-width: 1401px) {
+}
+
+@media screen and (min-width: 1201px) and (max-width: 1400px) {
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
+}
+
+@media screen and (max-width: 575px) {
+}

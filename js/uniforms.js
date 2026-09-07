@@ -247,12 +247,9 @@ function UniformsClass() {
 
                     //== Если input checkbox
                     if ((jEl.prop('tagName') == 'INPUT') && (jEl.attr('type') == 'checkbox')) {
-                        if (jEl.is('checked')) {
-                            out.append(jEl.attr('name'), 1);
-                        } 
-                        else {
-                            out.append(jEl.attr('name'), 0);
-                        }
+                        if (jEl.prop('checked')) { 
+                            out.append(jEl.attr('name'), jEl.val())
+                        }                         
                     } else if ((jEl.prop('tagName') == 'INPUT') && (jEl.attr('type') == 'file')) {
                         let fieldName = jEl.attr('name') + '[]';
                         for (let key in Object.keys(jEl[0].files) ) {
@@ -639,3 +636,5 @@ function UniformsClass() {
 
     this.__Init();
 }
+
+UniformsClass();
